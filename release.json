@@ -1,38 +1,5 @@
 {
-  "version": "preview-2026-11-22.1",
-  "public_baseline": "356aad96292e08af2fc7a3807b3c9fee6959e105",
-  "sources_sha256": {
-    "index.html": "a36966d61953a5392090c9242265a1baee6494f9fe72b5d42deae17176c1f5aa",
-    "app.js": "41ca3e8adebc9a96dac9c24a44aab188e32b9d910f46148bf463d26ed089763e",
-    "preview.css": "2be771af29ff17e1c4dbc446eb12cfaea2915ef6934936baea3c295ac2c5e53b",
-    "surface.js": "1df95df79935d366dcd5e939a5ff628036b32eefe5d6558782e7a4c298a76024",
-    "xt5-creative-exhibition.html": "bf5cb381236420af832f451b9753c2279562af174ac593ee4e67222216c1eb0f",
-    "volvo-music-festival.html": "4740175b35217746aa1d17382d573684e48518625a1fb8552530805c4ebaad2e",
-    "xt5-detail.js": "c12c3c6340c04622db0695fd5bd761c9442fafb7e1e74feb49415f7c17173ea4",
-    "xt5-detail.css": "c2ab839334a12a2ea51b6adcd8aa3bb7b593cda1bf462b92422aa581cf3b563f",
-    "case-colors.css": "83d7261d8816c02ec868febb93cf0cfdc5114aeaa25fbbf92b56656940b76b6c",
-    "case-sample.css": "056ae2cb94426951f10048919ba64a24bea60c14745f6cf415bc9d38a7d1f4dd",
-    "case-editorial.css": "b4f4dfcb8e576c60ea293c684012a8f60e7832b64c7a47b65b5ab60ab6f403fe",
-    "sample-entry.css": "33f7c01a4792cbf0db4335fcf2c16b3f7813cb92da860f16485042a473c0e891",
-    "xt5-outreach-story.css": "85cd5a68ad41bda6c44b54bd0be58b7d2fb4031f777bab2243921278973e1fe7",
-    "xt5-scroll.js": "d1be5cbbf8459573152d00b5d50d876b7f5e2c876ae68b7607f8d6338489e624"
-  },
-  "published_sha256": {
-    "index.html": "5b92ff5cd152223d9a973f6dedea7e912883b8e5bed76757155e8df5d145dc9c",
-    "preview-3d/index.html": "a36966d61953a5392090c9242265a1baee6494f9fe72b5d42deae17176c1f5aa",
-    "assets/js/navigation.js": "f5b583416877ea73a4379d608154735a9a68d8a85288ad8ace7f77e69aa330c8",
-    "preview-3d/preview.css": "2be771af29ff17e1c4dbc446eb12cfaea2915ef6934936baea3c295ac2c5e53b",
-    "preview-3d/case-colors.css": "83d7261d8816c02ec868febb93cf0cfdc5114aeaa25fbbf92b56656940b76b6c",
-    "preview-3d/app.js": "41ca3e8adebc9a96dac9c24a44aab188e32b9d910f46148bf463d26ed089763e",
-    "preview-3d/surface.js": "1df95df79935d366dcd5e939a5ff628036b32eefe5d6558782e7a4c298a76024",
-    "preview-3d/xt5-creative-exhibition.html": "bf5cb381236420af832f451b9753c2279562af174ac593ee4e67222216c1eb0f",
-    "preview-3d/xt5-detail.css": "c2ab839334a12a2ea51b6adcd8aa3bb7b593cda1bf462b92422aa581cf3b563f",
-    "preview-3d/case-sample.css": "056ae2cb94426951f10048919ba64a24bea60c14745f6cf415bc9d38a7d1f4dd",
-    "preview-3d/case-editorial.css": "b4f4dfcb8e576c60ea293c684012a8f60e7832b64c7a47b65b5ab60ab6f403fe",
-    "preview-3d/xt5-outreach-story.css": "85cd5a68ad41bda6c44b54bd0be58b7d2fb4031f777bab2243921278973e1fe7",
-    "preview-3d/sample-entry.css": "33f7c01a4792cbf0db4335fcf2c16b3f7813cb92da860f16485042a473c0e891",
-    "preview-3d/xt5-detail.js": "c12c3c6340c04622db0695fd5bd761c9442fafb7e1e74feb49415f7c17173ea4",
-    "preview-3d/xt5-scroll.js": "d1be5cbbf8459573152d00b5d50d876b7f5e2c876ae68b7607f8d6338489e624",
-    "preview-3d/volvo-music-festival.html": "4740175b35217746aa1d17382d573684e48518625a1fb8552530805c4ebaad2e"
-  }
+  "version": "preview-2026-11-23.1",
+  "productionBaseline": "244c03ff9e307335b65d2ed455e7f748287ae199",
+  "projects": 22
 }

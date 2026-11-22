@@ -20,59 +20,56 @@ const fragmentSource = `
 `;
 
 const gridColumns = 5;
-const horizontalSegments = 14;
-const verticalSegments = 16;
 
 export const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
-export function clampView(layout, x, y) {
-  const { left, right, top, bottom } = layout.pan;
-  const centerX = clamp(x, left, right);
-  const finalRow = layout.partialRow;
-  // Blend into the shallower edge once the view moves past the occupied columns.
-  const extra = finalRow ? finalRow.height * clamp(centerX - finalRow.right, 0, 1) : 0;
-  return { x: centerX, y: clamp(y, top, Math.max(top, bottom - extra)) };
-}
+const wrap = (value, count) => ((value % count) + count) % count;
 
 export function layoutFor(width, height, projectIds) {
   const narrow = width <= 680;
   const stepX = narrow ? Math.max(1, width * .51) : clamp(width * .248, 242, 555);
   const stepY = narrow ? Math.max(height * .365, 162) : clamp(height * .365, 217, 410);
   const columns = Math.min(gridColumns, projectIds.length);
-  const rows = Math.ceil(projectIds.length / gridColumns);
-  const lastRowColumns = projectIds.length - (rows - 1) * gridColumns;
-  const xLines = Array.from({ length: columns + 1 }, (_, i) => (i - .5) * stepX);
-  const yLines = Array.from({ length: rows + 1 }, (_, i) => (narrow || i <= 1 ? i - 1 : i - .75) * stepY);
-  const sizes = narrow ? [.94, .96, .92, .95, .93] : [.92, .95, .86, .93, .89];
-  const tiles = {};
-  const centers = projectIds.map((id, index) => {
-    const r = Math.floor(index / gridColumns), c = index % gridColumns;
-    const cell = { left: xLines[c], right: xLines[c + 1], top: yLines[r], bottom: yLines[r + 1] };
-    const x = (cell.left + cell.right) / 2, y = (cell.top + cell.bottom) / 2;
-    tiles[id] = { cell, x, y, width: sizes[(r + c) % sizes.length] * stepX };
-    return { x: x / stepX, y: y / stepY };
+  const rows = Math.ceil(projectIds.length / columns);
+  // Fill the short last row with existing projects so both edges tile continuously.
+  const slots = Array.from({length: columns * rows}, (_, i) =>
+    projectIds[i] ?? projectIds[(i * 7) % projectIds.length]);
+  const rowEdges = Array.from({length: rows+1}, (_, i) => narrow || i <= 1 ? i - 1 : i - .75);
+  const periodY = rowEdges.at(-1) - rowEdges[0];
+  return {width,height,narrow,stepX,stepY,columns,rows,slots,rowEdges,periodY,
+    homeX:narrow ? .5 : (columns-1)/2,homeY:narrow ? 1 : 0};
+}
+
+export function viewForTile(layout, id, view = {x:layout.homeX,y:layout.homeY}) {
+  let best, distance = Infinity;
+  layout.slots.forEach((slot, i) => {
+    if (slot !== id) return;
+    const col = i % layout.columns, row = Math.floor(i/layout.columns);
+    const center = (layout.rowEdges[row]+layout.rowEdges[row+1])/2;
+    const x = col + Math.round((view.x-col)/layout.columns)*layout.columns;
+    const y = center + Math.round((view.y-center)/layout.periodY)*layout.periodY;
+    const d = Math.hypot(x-view.x,y-view.y);
+    if (d < distance) { distance=d; best={x,y}; }
   });
-  const left = Math.min(...centers.map(center => center.x));
-  const right = Math.max(...centers.map(center => center.x));
-  const top = Math.min(...centers.map(center => center.y));
-  const bottom = Math.max(...centers.map(center => center.y));
-  // Keep the outer tiles in reach without panning half the viewport past the board.
-  const sideInset = Math.min(narrow ? .5 : width * .194 / stepX, (right - left) / 2);
-  const halfHeight = (bottom - top) / 2;
-  const pan = {
-    left: left + sideInset,
-    right: right - sideInset,
-    top: top + Math.min(height * .125 / stepY, halfHeight),
-    bottom: bottom - Math.min(height * .175 / stepY, halfHeight),
-  };
-  const partialRow = rows > 1 && lastRowColumns < columns ? {
-    right: lastRowColumns - 1,
-    height: bottom - centers[(rows - 2) * gridColumns].y,
-  } : null;
-  return {
-    width, height, narrow, tiles, xLines, yLines, stepX, stepY, pan, lastRowColumns, partialRow,
-    homeX: narrow ? pan.left : (pan.left + pan.right) / 2,
-    homeY: narrow ? clamp(1, pan.top, pan.bottom) : 0,
-  };
+  return best;
+}
+
+function visibleCells(layout, view) {
+  const {width,height,stepX,stepY,columns,rows,periodY,rowEdges,slots,narrow} = layout;
+  const reachX = width / stepX * .9 + 1, reachY = height / stepY * .7 + 1;
+  const cells = [];
+  for (let band=Math.floor((view.y-reachY+1)/periodY);band<=Math.floor((view.y+reachY+1)/periodY);band++) {
+    for (let r=0;r<rows;r++) {
+      const top=(band*periodY+rowEdges[r])*stepY, bottom=(band*periodY+rowEdges[r+1])*stepY;
+      if (bottom < (view.y-reachY)*stepY || top > (view.y+reachY)*stepY) continue;
+      for (let c=Math.floor(view.x-reachX);c<=Math.ceil(view.x+reachX);c++) {
+        const col=wrap(c,columns), id=slots[r*columns+col];
+        const sizes=narrow ? [.94,.96,.92,.95,.93] : [.92,.95,.86,.93,.89];
+        cells.push({id,key:c+','+(band*rows+r),x:c*stepX,y:(top+bottom)/2,width:sizes[(r+col)%5]*stepX,
+          cell:{left:(c-.5)*stepX,right:(c+.5)*stepX,top,bottom}});
+      }
+    }
+  }
+  return cells;
 }
 
 function tileContent(tile, aspect, narrow) {
@@ -106,10 +103,6 @@ function tileContent(tile, aspect, narrow) {
   return { art, corners };
 }
 
-export function viewForTile(layout, id) {
-  const { x, y } = layout.tiles[id];
-  return clampView(layout, x / layout.stepX, y / layout.stepY);
-}
 
 function project(x, y, layout, view) {
   const { width, height, narrow, stepX, stepY } = layout;
@@ -121,11 +114,10 @@ function project(x, y, layout, view) {
   const scale = 1 / (1 + (narrow ? .070 : .168) * u / (1 + .63 * u) + (narrow ? .020 : .044) * v / (1 + .40 * v));
   const horizontal = dx * scale;
   const edge = Math.min(1.65, (2 * horizontal / width) ** 2);
-  const fromSeam = y - (narrow ? stepY : 0);
+  const fromSeam = y - view.y * stepY;
   const bend = fromSeam / (1 + .32 * (fromSeam / stepY) ** 2);
   const bow = bend * zoom * edge * (narrow ? .055 : .192);
-  // Bend relative to the middle seam in the same plane as the tiles.
-  // Moving the view can carry a seam past the center without reversing its bend.
+  // Keep the lens centered on the viewport as the repeated plane moves beneath it.
   return {
     x: width * .5 + horizontal,
     y: height * (narrow ? .5 : .49) + dy + bow,
@@ -209,7 +201,7 @@ export function requestCover(picture, sizes, priority = 'auto', loading = 'eager
   picture.loading = loading;
   picture.fetchPriority = priority;
   picture.sizes = sizes;
-  picture.srcset = picture.dataset.srcset;
+  if (picture.dataset.srcset) picture.srcset = picture.dataset.srcset;
   picture.src = picture.dataset.src;
 }
 
@@ -317,15 +309,44 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
   gl.uniform1i(gl.getUniformLocation(program, 'uImage'), 0);
   const solid = textureFor(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 255, 255, 255]));
-  const guidePoints = 1 + Math.max(gridColumns * horizontalSegments,
-    Math.ceil(links.length / gridColumns) * verticalSegments);
+  const guidePoints = perimeter.length + 1;
   const line = new Float32Array(guidePoints * 4);
   const cards = links.map(link => ({
     link, id: link.dataset.project,
     texture: null, picture: link.querySelector('img'),
     artwork: link.querySelector('.artwork'), labels: [...link.querySelectorAll('.project-meta')],
   }));
+  // Embed a small RGB copy of each cover so the first painted frame has imagery.
+  for (const card of cards) {
+    const pixels = Uint8Array.from(atob(card.picture.dataset.pixels), value => value.charCodeAt(0));
+    card.texture = textureFor(gl);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 32, 20, 0, gl.RGB, gl.UNSIGNED_BYTE, pixels);
+  }
+  const byId = new Map(cards.map(card => [card.id,card]));
+  const copies = new Map();
+  const fades = new Map();
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let shapes = [];
+  function instance(card, key) {
+    if (copies.has(key)) return copies.get(key);
+    const link = document.createElement('div');
+    link.className = 'project repeat-cell';
+    link.setAttribute('aria-hidden','true');
+    const artwork = document.createElement('span');
+    artwork.className = 'artwork';
+    link.append(artwork);
+    const labels = card.labels.map(label => {
+      const copy = label.cloneNode(true);
+      copy.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      copy.removeAttribute('id');
+      link.append(copy);
+      return copy;
+    });
+    card.link.parentNode.append(link);
+    const entry = {link,artwork,labels};
+    copies.set(key,entry);
+    return entry;
+  }
   let pending = 0;
 
   const finishRequest = card => {
@@ -343,6 +364,14 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
       onFallback();
       return;
     }
+    const swatch = document.createElement('canvas');
+    swatch.width = swatch.height = 3;
+    const painter = swatch.getContext('2d');
+    painter.filter = "saturate(175%) brightness(165%)";
+    painter.drawImage(card.picture,0,0,3,3);
+    card.field ??= textureFor(gl);
+    gl.bindTexture(gl.TEXTURE_2D, card.field);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,swatch);
     card.loaded = true;
     onRedraw();
   };
@@ -354,6 +383,16 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     card.picture.addEventListener('load', () => upload(card), { signal });
     card.picture.addEventListener('error', () => {
       finishRequest(card);
+      if (!card.retried) {
+        card.retried = true;
+        setTimeout(() => {
+          if (signal.aborted) return;
+          const url = new URL(card.picture.dataset.src, document.baseURI);
+          url.searchParams.set('retry', '1');
+          card.picture.removeAttribute('srcset');
+          card.picture.src = url.href;
+        }, 900);
+      }
       onRedraw();
     }, { signal });
   }
@@ -370,29 +409,13 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     gl.drawArrays(gl.LINE_STRIP, 0, points.length);
   }
 
-  function drawGuides(layout, view) {
-    const { xLines, yLines, lastRowColumns } = layout;
-    const color = [.65, .64, .62, .34];
-    for (const [row, y] of yLines.entries()) {
-      const end = row === yLines.length - 1 ? lastRowColumns : xLines.length - 1;
-      const points = xLines.slice(0, end).flatMap((x, i) =>
-        horizontalEdge(x, xLines[i + 1], y, layout, view, horizontalSegments).slice(i === 0 ? 0 : 1));
-      drawLine(points, layout, color);
-    }
-    for (const [col, x] of xLines.entries()) {
-      const end = yLines.length - (col <= lastRowColumns ? 1 : 2);
-      const points = yLines.slice(0, end).flatMap((y, i) =>
-        verticalEdge(x, y, yLines[i + 1], layout, view, verticalSegments).slice(i === 0 ? 0 : 1));
-      drawLine(points, layout, color);
-    }
-  }
-
   function loadNearby(cards, layout, dpr, view) {
-    const atHome = view.x === layout.homeX && view.y === layout.homeY && view.pull < .02;
-    const reach = atHome ? 0 : Math.min(124, layout.stepX * .30);
+    
+    const reach = layout.stepX * .95;
     const queue = cards.filter(entry => !entry.card.requested && entry.distance <= reach)
       .sort((a, b) => a.distance - b.distance || b.area - a.area);
-    for (const { card, art, distance } of queue.slice(0, Math.max(0, 4 - pending))) {
+    for (const { card, art, distance } of queue.slice(0, Math.max(0, 6 - pending))) {
+      if (card.requested) continue;
       pending++;
       card.requested = card.pending = true;
       const effectiveWidth = (art.right - art.left) * dpr / (devicePixelRatio || 1);
@@ -400,7 +423,7 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     }
   }
 
-  function draw(layout, view, active) {
+  function draw(layout, view, active, pointer, preferredKey) {
     if (!layout.width || !layout.height || gl.isContextLost()) return;
     const dpr = Math.min(devicePixelRatio || 1, 2, Math.sqrt(3300000 / (layout.width * layout.height)));
     const width = Math.round(layout.width * dpr), height = Math.round(layout.height * dpr);
@@ -410,10 +433,10 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     }
     gl.viewport(0, 0, width, height);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    drawGuides(layout, view);
 
-    const projected = cards.map(card => {
-      const tile = layout.tiles[card.id];
+
+    const projected = visibleCells(layout,view).map(tile => {
+      const card = byId.get(tile.id);
       const aspect = Number(card.picture.getAttribute('width')) / Number(card.picture.getAttribute('height'));
       const { art, corners } = tileContent(tile, aspect, layout.narrow);
       const center = project((art.left + art.right) / 2, (art.top + art.bottom) / 2, layout, view);
@@ -421,20 +444,29 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
       const area = Math.max(0, Math.min(box.right, layout.width) - Math.max(0, box.left))
         * Math.max(0, Math.min(box.bottom, layout.height) - Math.max(0, box.top));
       const visible = viewportDistance(projectedBounds(tile.cell, layout, view), layout) < 8;
-      card.link.classList.toggle('is-offscreen', !visible);
-      return { card, art, corners, center, area, visible, distance: viewportDistance(box, layout) };
+
+      return { tile, card, art, corners, center, area, visible, distance: viewportDistance(box, layout) };
     });
     loadNearby(projected, layout, dpr, view);
     const ordered = projected.filter(entry => entry.visible)
       .sort((a, b) => a.center.scale - b.center.scale);
-    shapes = ordered.map(({ card, art, corners, center }, layer) => {
+    const primary = new Map();
+    for (const entry of ordered) {
+      const previous=primary.get(entry.card);
+      const distance=e=>Math.hypot(e.center.x-layout.width/2,e.center.y-layout.height/2);
+      if (!previous || entry.tile.key===preferredKey ||
+          (previous.tile.key!==preferredKey && distance(entry)<distance(previous))) primary.set(entry.card,entry);
+    }
+    cards.forEach(card=>card.link.classList.toggle('is-offscreen',!primary.has(card)));
+    const used = new Set(), painted = new Set();
+    const meshRect = rect => {
       const outline = [];
       for (let row = 0; row <= rows; row++) {
         for (let col = 0; col <= columns; col++) {
           const i = row * stride + col;
           const point = project(
-            art.left + col / columns * (art.right - art.left),
-            art.top + row / rows * (art.bottom - art.top),
+            rect.left + col / columns * (rect.right - rect.left),
+            rect.top + row / rows * (rect.bottom - rect.top),
             layout, view,
           );
           mesh[i * 4] = point.x / layout.width * 2 - 1;
@@ -442,27 +474,59 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
           if (rim.has(i)) outline[i] = point;
         }
       }
-      const polygon = perimeter.map(i => outline[i]);
-      positionLink(card, polygon, corners, layout, view, layer + 1);
-      const brightness = .995 - (1 - center.scale) * .29 + (active === card.link ? .065 : 0);
-      gl.bindTexture(gl.TEXTURE_2D, card.loaded ? card.texture : solid);
-      const shade = card.loaded ? brightness : .069;
+      return perimeter.map(i => outline[i]);
+    };
+    shapes = ordered.map((entry, layer) => {
+      const {tile,card,art,corners,center}=entry;
+      const cell = meshRect(tile.cell);
+      const primaryCell = primary.get(card)===entry;
+      const target = primaryCell ? card : instance(card,tile.key);
+      if (!primaryCell) used.add(tile.key);
+      target.link.dataset.cell = tile.key;
+      target.link.dataset.instanceProject = card.id;
+      const selected = active===card.link && (pointer ? contains(cell,pointer.x,pointer.y) : primaryCell);
+      const old = fades.get(tile.key) || 0;
+      const level = reduced.matches ? Number(selected) : old + (Number(selected)-old)*.34;
+      if (Math.abs(level-Number(selected))>.012) onRedraw();
+      if (level>.012) {
+        fades.set(tile.key,level);
+        painted.add(tile.key);
+        gl.bindTexture(gl.TEXTURE_2D,card.field || solid);
+        const flat=stage.dataset.hoverStyle==='flat';
+        if (flat) gl.bindTexture(gl.TEXTURE_2D,solid);
+        const tint = flat ? [.16, .31, .47] : [.94, .94, .97];
+        gl.uniform4f(tone, ...tint, level * .94);
+        gl.bufferSubData(gl.ARRAY_BUFFER,0,mesh);
+        gl.drawElements(gl.TRIANGLES,indices.length,gl.UNSIGNED_SHORT,0);
+      }
+      drawLine(horizontalEdge(tile.cell.left,tile.cell.right,tile.cell.top,layout,view),layout,[.65,.64,.62,.34]);
+      drawLine(verticalEdge(tile.cell.left,tile.cell.top,tile.cell.bottom,layout,view),layout,[.65,.64,.62,.34]);
+      const polygon = meshRect(art);
+      positionLink(target, polygon, corners, layout, view, layer + 1);
+      const brightness = .995 - (1 - center.scale) * .29 + (selected ? .045 : 0);
+      gl.bindTexture(gl.TEXTURE_2D, card.texture);
+      const shade = brightness;
       gl.uniform4f(tone, shade, shade, shade, 1);
       gl.bufferSubData(gl.ARRAY_BUFFER, 0, mesh);
       gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
-      const selected = active === card.link;
+
       drawLine([...polygon, polygon[0]], layout, selected ? [.97, .54, .44, .91] : [.66, .59, .52, .31]);
-      return { link: card.link, outline: polygon };
+      return { link: card.link, outline: cell, key:tile.key };
     });
+    for(const [key,copy] of copies) if(!used.has(key)){copy.link.remove();copies.delete(key)}
+    for(const key of fades.keys()) if(!painted.has(key)) fades.delete(key);
   }
 
   return {
     draw,
+    cellAt(x,y){return shapes.findLast(s=>contains(s.outline,x,y))?.key},
     hit(x, y) { return pickSurface(shapes, x, y); },
     destroy() {
       events.abort();
+      copies.forEach(copy=>copy.link.remove());
       cards.forEach(card => {
         if (card.texture) gl.deleteTexture(card.texture);
+        if (card.field) gl.deleteTexture(card.field);
         card.link.classList.remove('is-offscreen');
         card.link.removeAttribute('style');
         card.artwork.removeAttribute('style');

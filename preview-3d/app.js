@@ -1,4 +1,4 @@
-import { clamp, clampView, createScene, layoutFor, requestCover, viewForTile } from './surface.js';
+import { clamp, createScene, layoutFor, requestCover, viewForTile } from './surface.js';
 
 const stage = document.querySelector('.stage');
 const links = [...stage.querySelectorAll('.project')];
@@ -18,6 +18,7 @@ const view = { x: 0, y: 0, pull: 0, driftX: 0, driftY: 0 };
 const velocity = { x: 0, y: 0 };
 const smoothing = (rate, seconds) => 1 - Math.exp(-rate * seconds);
 let layout = layoutFor(innerWidth, innerHeight, projectIds);
+let preferredKey;
 let scene, press, mouse, hovered, returned, leaving;
 let ready = false, gridStarted = false, suppressClick = false, restoring = false;
 let frame = 0, lastFrame = 0, exitTimer = 0;
@@ -84,7 +85,7 @@ function saveEntry(projectId, updateHash = false) {
   if (updateHash) url.hash = section === 'resume' ? 'resume' : '';
   history.replaceState({
     ...history.state,
-    [stateKey]: { x: view.x, y: view.y, projectId, gridSize: links.length, workView, scrollOffsets: { ...scrollOffsets } },
+    [stateKey]: { x: view.x, y: view.y, projectId, cell:preferredKey, gridSize: links.length, workView, scrollOffsets: { ...scrollOffsets } },
   }, '', url);
 }
 
@@ -139,8 +140,7 @@ function relativePoint(clientX, clientY) {
 function linkAt(clientX, clientY) {
   const point = relativePoint(clientX, clientY);
   if (point.x < 0 || point.y < 0 || point.x >= layout.width || point.y >= layout.height) return null;
-  const label = document.elementFromPoint(clientX, clientY)?.closest('.project-meta');
-  return label?.closest('.project') || scene?.hit(point.x, point.y) || null;
+  return scene?.hit(point.x, point.y) || null;
 }
 
 function highlight(link) {
@@ -157,12 +157,12 @@ function tick(now) {
   lastFrame = now;
   let moving = false;
   if (!press && !leaving && !reduced.matches) {
-    const fraction = smoothing(5.8, seconds);
-    const next = { x: view.x + velocity.x * fraction / 5.8, y: view.y + velocity.y * fraction / 5.8 };
-    const limited = clampView(layout, next.x, next.y);
+    const fraction = smoothing(4.3, seconds);
+    const next = { x: view.x + velocity.x * fraction / 4.3, y: view.y + velocity.y * fraction / 4.3 };
+
     for (const axis of ['x', 'y']) {
-      view[axis] = limited[axis];
-      velocity[axis] = next[axis] === limited[axis] ? velocity[axis] * (1 - fraction) : 0;
+      view[axis] = next[axis];
+      velocity[axis] = velocity[axis] * (1 - fraction);
       if (Math.abs(velocity[axis]) < .01) velocity[axis] = 0;
       moving ||= velocity[axis] !== 0;
     }
@@ -172,8 +172,8 @@ function tick(now) {
   const target = allowDrift ? relativePoint(mouse.x, mouse.y) : null;
   const goals = {
     pull: reduced.matches ? 0 : press?.dragging ? 1 : press ? view.pull : 0,
-    driftX: target ? -clamp((target.x / layout.width - .5) * 20, -10, 10) : press ? view.driftX : 0,
-    driftY: target ? -clamp((target.y / layout.height - .5) * 14, -7, 7) : press ? view.driftY : 0,
+    driftX: target ? -clamp((target.x / layout.width - .5) * 44, -22, 22) : press ? view.driftX : 0,
+    driftY: target ? -clamp((target.y / layout.height - .5) * 32, -16, 16) : press ? view.driftY : 0,
   };
   for (const property of ['pull', 'driftX', 'driftY']) {
     const delta = goals[property] - view[property];
@@ -186,8 +186,8 @@ function tick(now) {
 
   const hover = !press && !leaving && mouse ? linkAt(mouse.x, mouse.y) : null;
   const focused = document.activeElement?.matches('.project:focus-visible') ? document.activeElement : null;
-  highlight(leaving || focused || hover || returned || null);
-  scene?.draw(layout, view, hovered);
+  highlight(leaving || hover || focused || returned || null);
+  scene?.draw(layout, view, press ? null : hovered, hover === hovered && mouse ? relativePoint(mouse.x,mouse.y) : null, preferredKey);
   // A stationary pointer can be crossed by a moving card even after the last animation step.
   if (moving || (mouse && !press && !leaving && hover !== linkAt(mouse.x, mouse.y))) redraw();
   else lastFrame = 0;
@@ -203,7 +203,7 @@ function refreshLayout() {
     const wasHome = view.x === layout.homeX && view.y === layout.homeY;
     layout = layoutFor(stage.clientWidth, stage.clientHeight, projectIds);
     if (press) endPress(null, false);
-    Object.assign(view, wasHome ? { x: layout.homeX, y: layout.homeY } : clampView(layout, view.x, view.y));
+    if (wasHome) Object.assign(view, { x: layout.homeX, y: layout.homeY });
   }
   redraw();
 }
@@ -241,6 +241,7 @@ function restoreEntry(resetOnReload = false) {
   view.pull = view.driftX = view.driftY = 0;
   const resetGrid = resetOnReload && !location.hash;
   const state = resetGrid ? null : history.state?.[stateKey];
+  preferredKey = state?.cell;
   section = location.hash === '#resume' ? 'resume' : 'work';
   workView = state?.workView === 'list' ? 'list' : 'grid';
   for (const mode of Object.keys(scrollOffsets)) {
@@ -256,7 +257,7 @@ function restoreEntry(resetOnReload = false) {
     : mode === 'list' ? listLinks.get(state?.projectId) : gridLink) || null;
   const position = gridLink && state.gridSize !== links.length
     ? viewForTile(layout, gridLink.dataset.project)
-    : gridVisible() ? clampView(layout, x, y) : { x, y };
+    : { x, y };
   Object.assign(view, position);
   scroller.scrollTop = scrollOffsets[mode];
   if (resetGrid) saveEntry(null);
@@ -298,7 +299,8 @@ window.addEventListener('pointermove', event => {
       stage.setPointerCapture(event.pointerId);
     }
     if (press.dragging) {
-      Object.assign(view, clampView(layout, press.x - dx / layout.stepX, press.y - dy / layout.stepY));
+      view.x = press.x - dx / layout.stepX;
+      view.y = press.y - dy / layout.stepY;
     }
     press.samples.push(point);
     // Keep the last point just outside the velocity window for interpolation at its edge.
@@ -330,8 +332,8 @@ function endPress(event, release) {
       if (end.time - last.time <= 105) {
         const first = drag.samples.find(point => end.time - point.time <= 105) || last;
         const seconds = Math.max(.025, (end.time - first.time) / 1000);
-        velocity.x = clamp((first.x - end.x) / layout.stepX / seconds, -2.75, 2.75);
-        velocity.y = clamp((first.y - end.y) / layout.stepY / seconds, -2.75, 2.75);
+        velocity.x = clamp((first.x - end.x) / layout.stepX / seconds, -4, 4);
+        velocity.y = clamp((first.y - end.y) / layout.stepY / seconds, -4, 4);
       }
     }
   }
@@ -345,6 +347,8 @@ window.addEventListener('pointerup', event => {
   const startedOnLink = link && linkAt(press.start.x, press.start.y) === link;
   endPress(event, true);
   if (!startedOnLink) return;
+  const point = relativePoint(event.clientX,event.clientY);
+  preferredKey = scene.cellAt(point.x,point.y);
 
   // The browser may withhold a compatibility click after a touch drag.
   // Open only when this new press starts and ends on the same projected card.
@@ -367,7 +371,8 @@ stage.addEventListener('focusin', event => {
   if (!link || restoring || !ready || press || !link.matches(':focus-visible')) return;
   clearReturned();
   stopGlide();
-  Object.assign(view, viewForTile(layout, link.dataset.project));
+  preferredKey = null;
+  Object.assign(view, viewForTile(layout, link.dataset.project, view));
   redraw();
 });
 stage.addEventListener('focusout', redraw);
@@ -379,7 +384,8 @@ stage.addEventListener('keydown', event => {
   event.preventDefault();
   clearReturned();
   stopGlide();
-  Object.assign(view, clampView(layout, view.x + step[0], view.y + step[1]));
+  view.x += step[0];
+  view.y += step[1];
   redraw();
 });
 
@@ -396,8 +402,13 @@ stage.addEventListener('click', event => {
     if (anchor) event.preventDefault();
     return;
   }
+  if (ready && fromPointer) {
+    const point=relativePoint(event.clientX,event.clientY);
+    preferredKey=scene.cellAt(point.x,point.y);
+  }
   saveEntry(link.dataset.project);
-  if (!ready || reduced.matches) return;
+  if (!ready) return;
+  if (reduced.matches) { event.preventDefault(); location.assign(link.href); return; }
   event.preventDefault();
   exitToProject(link);
 });

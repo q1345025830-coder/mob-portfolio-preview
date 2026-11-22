@@ -39,3 +39,47 @@
   --case-rule: #5c4d40;
   --case-panel: #332b24;
 }
+
+[data-case-theme="xt5"] { --case-tone: #17232e; }
+
+[data-case-theme="show-stage"] { --case-tone: #2a211d; }
+
+[data-case-theme="phev"] { --case-tone: #152528; }
+
+[data-case-theme="service-skills-competition"] { --case-tone: #2e1418; }
+
+[data-case-theme="volvo-xc70-exhibition"] { --case-tone: #20332b; }
+
+[data-case-theme="hailar-ice-drive"] { --case-tone: #18293c; }
+
+[data-case-theme="new-year"] { --case-tone: #46232a; }
+
+[data-case-theme="mobile-showroom-2026"] { --case-tone: #28242a; }
+
+[data-case-theme="ct5-f1-track-drive"] { --case-tone: #261e24; }
+
+[data-case-theme="brick"] { --case-tone: #302521; }
+
+[data-case-theme="canyon"] { --case-tone: #291c17; }
+
+[data-case-theme="xian-v-academy"] { --case-tone: #252a2d; }
+
+[data-case-theme="anniversary"] { --case-tone: #20232b; }
+
+[data-case-theme="volvo-showroom-renovation"] { --case-tone: #302c26; }
+
+[data-case-theme="buick-posm"] { --case-tone: #22282d; }
+
+[data-case-theme="yangshuo"] { --case-tone: #1e2821; }
+
+[data-case-theme="ct6-creative-exhibition"] { --case-tone: #172c30; }
+
+[data-case-theme="xt5-tibet"] { --case-tone: #272b25; }
+
+[data-case-theme="aurora"] { --case-tone: #10262b; }
+
+[data-case-theme="cadillac-changsha"] { --case-tone: #2c241e; }
+
+[data-case-theme="outdoor"] { --case-tone: #242922; }
+
+[data-case-theme="phev-drive"] { --case-tone: #292520; }

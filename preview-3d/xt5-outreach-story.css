@@ -112,3 +112,21 @@
 @media (max-width: 340px) {
   .xt5-screen-strip { grid-template-columns: minmax(0, 1fr); }
 }
+.xt5-overlook, .xt5-material-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.25fr);
+  align-items: start;
+  gap: clamp(24px, 4vw, 72px);
+  margin-top: clamp(38px, 6vw, 84px);
+}
+.xt5-overlook .xt5-site-overview { width: 100%; margin: 0; }
+.overlook-copy { padding-top: clamp(16px,3vw,48px); max-width: 24em; }
+.overlook-copy h3 { font-size: clamp(22px,2vw,34px); margin: 0 0 .65em; }
+.overlook-copy p { line-height: 1.75; color: var(--muted); }
+.xt5-material-pair { grid-template-columns: minmax(0,2.65fr) minmax(0,1fr); }
+.xt5-material-pair .photo-reference { align-self: end; }
+@media(max-width:680px) {
+  .xt5-overlook,.xt5-material-pair { grid-template-columns: 1fr; gap: 22px; }
+  .overlook-copy { padding: 0; }
+  .xt5-material-pair .photo-reference { width: 60%; justify-self: end; }
+}
