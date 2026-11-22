@@ -1,0 +1,41 @@
+[data-case-theme="aurora"] {
+  --case-tone: #10262b;
+  --case-accent: #9fd4cc;
+  --case-rule: #3b565a;
+  --case-panel: #173139;
+}
+
+[data-case-theme="brick"] {
+  --case-tone: #271f1d;
+  --case-accent: #e09985;
+  --case-rule: #624a43;
+  --case-panel: #362a26;
+}
+
+[data-case-theme="canyon"] {
+  --case-tone: #291c17;
+  --case-accent: #e7aa82;
+  --case-rule: #614639;
+  --case-panel: #372820;
+}
+
+[data-case-theme="show-stage"] {
+  --case-tone: #191616;
+  --case-accent: #eeb58e;
+  --case-rule: #59423b;
+  --case-panel: #28201e;
+}
+
+[data-case-theme="outdoor"] {
+  --case-tone: #1b1c19;
+  --case-accent: #e8bd87;
+  --case-rule: #4c4a3f;
+  --case-panel: #292a24;
+}
+
+[data-case-theme="phev-drive"] {
+  --case-tone: #22201d;
+  --case-accent: #e6b68b;
+  --case-rule: #5c4d40;
+  --case-panel: #332b24;
+}

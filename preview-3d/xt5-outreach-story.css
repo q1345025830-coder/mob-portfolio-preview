@@ -1,0 +1,114 @@
+.xt5-outreach .xt5-inspiration {
+  padding-block: clamp(72px, 11vw, 154px) clamp(68px, 9vw, 128px);
+}
+
+.xt5-inspiration h2 {
+  margin-bottom: clamp(18px, 3vw, 40px);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+.xt5-inspiration .case-lead { max-width: 22em; }
+.xt5-outreach .xt5-inspiration + .story { margin-top: 0; }
+
+.xt5-rock-views {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, .82fr);
+  align-items: start;
+  gap: clamp(20px, 3.2vw, 48px);
+  margin-top: clamp(28px, 4.4vw, 68px);
+}
+
+.xt5-rock-views .photo-reference { margin-top: clamp(20px, 6vw, 88px); }
+.xt5-site-overview {
+  width: 69%;
+  margin: clamp(38px, 6vw, 84px) 0 0 auto;
+}
+
+.xt5-stair-note {
+  display: grid;
+  grid-template-columns: minmax(0, 2.55fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(16px, 2vw, 32px);
+  width: min(58%, 735px);
+  margin-top: clamp(24px, 3.4vw, 50px);
+}
+
+.xt5-stair-label {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.xt5-stair-copy h3 {
+  margin: .4em 0 .45em;
+  font-size: clamp(19px, 1.8vw, 28px);
+  line-height: 1.2;
+}
+
+.xt5-stair-copy p:last-child {
+  color: #ded8cf;
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.xt5-stair-note .figure-kind { font-size: 12px; }
+.xt5-stair-note figcaption a { white-space: nowrap; }
+
+.xt5-outreach .xt5-roof-chapter { border-top: 0; }
+.xt5-roof-chapter .xt5-roof-copy {
+  display: block;
+  padding-block: 0 clamp(12px, 1.4vw, 22px);
+  margin-bottom: clamp(9px, 1vw, 15px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.xt5-roof-chapter .xt5-roof-copy h2 {
+  color: #f2e3cf;
+  font-size: clamp(55px, 7.4vw, 108px);
+  line-height: 1;
+}
+
+.xt5-screen-strip {
+  --screen-gap: clamp(8px, 1.15vw, 17px);
+  display: grid;
+  /* Keep the wide 16:9 image as tall as the two 16:9 images and their gap. */
+  grid-template-columns: calc(66.6667% - var(--screen-gap) * .074074) minmax(0, 1fr);
+  gap: var(--screen-gap);
+}
+
+.xt5-screen-canyon { grid-row: span 2; }
+.xt5-screen-sunset { grid-column: 1 / -1; }
+.xt5-screen-strip .media-link .expand-mark { opacity: 0; }
+.xt5-screen-strip .media-link:is(:hover, :focus-visible) .expand-mark { opacity: 1; }
+
+.xt5-screen-end { margin-top: clamp(36px, 5vw, 72px); }
+
+.xt5-interior-end {
+  width: 78%;
+  margin: clamp(54px, 7vw, 110px) 0 0 auto;
+}
+
+@media (max-width: 680px) {
+  .xt5-rock-views { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+  .xt5-rock-views > :first-child { grid-column: 1 / -1; }
+  .xt5-rock-views .photo-reference { margin-top: 32px; }
+  .xt5-site-overview { width: 100%; }
+  .xt5-roof-chapter .xt5-roof-copy h2 { font-size: clamp(39px, 12vw, 64px); }
+  .xt5-roof-copy h2 span { display: block; }
+  .xt5-stair-note {
+    grid-template-columns: minmax(0, 53fr) minmax(0, 47fr);
+    gap: 14px;
+    width: 100%;
+  }
+  .xt5-screen-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .xt5-screen-canyon { grid-row: auto; grid-column: 1 / -1; }
+  .xt5-interior-end { width: 100%; margin-top: 34px; }
+}
+
+@media (max-width: 340px) {
+  .xt5-screen-strip { grid-template-columns: minmax(0, 1fr); }
+}

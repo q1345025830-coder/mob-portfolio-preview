@@ -1,0 +1,58 @@
+/* Loaded by the rock-wall and aurora stories only. */
+:root { --fog-height: calc(82px + env(safe-area-inset-top)); scroll-padding-top: var(--fog-height); }
+.case-sample .case-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  isolation: isolate;
+  width: 100%;
+  padding-inline: max(var(--gutter), calc((100vw - 1440px) / 2), env(safe-area-inset-left))
+                  max(var(--gutter), calc((100vw - 1440px) / 2), env(safe-area-inset-right));
+  border: 0;
+}
+.case-sample .case-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--fog-height);
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--case-tone) 74%, transparent), transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-mask-image: linear-gradient(#000 12%, #000d 46%, transparent);
+  mask-image: linear-gradient(#000 12%, #000d 46%, transparent);
+}
+.case-sample .case-header::after { content: none; }
+.xt5-outreach .hero-title {
+  padding-block: clamp(30px, 5svh, 64px) clamp(28px, 4svh, 54px);
+  text-align: center;
+}
+.xt5-outreach h1 { font-size: clamp(66px, min(10.6vw, 13.4svh), 155px); line-height: .98; }
+.xt5-outreach .festival-title h1 :is(.title-model, .title-name) { display: block; margin: 0; }
+[data-case-theme="aurora"] .hero-title { padding-block: clamp(38px, 7svh, 76px) clamp(24px, 4svh, 52px); }
+[data-case-theme="aurora"] h1 { font-size: clamp(52px, 6.5vw, 100px); }
+.xt5-stair-note { width: min(75%, 950px); gap: clamp(24px, 4vw, 60px); }
+@media (min-width: 681px) {
+  .case-sample .hero-figure .media-link { aspect-ratio: 2.65 / 1; overflow: hidden; }
+  .case-sample .hero-figure .media-link img { height: 100%; object-fit: cover; object-position: 50% 65%; }
+}
+@media (max-width: 680px) {
+  .xt5-outreach h1 { font-size: clamp(52px, 15vw, 84px); }
+  .xt5-outreach .hero-title { padding-block: clamp(30px, 7svh, 52px) clamp(26px, 5svh, 38px); }
+  [data-case-theme="aurora"] .festival-title h1 span { display: inline; margin: 0; }
+  [data-case-theme="aurora"] h1 { font-size: clamp(35px, 11.5vw, 64px); }
+  [data-case-theme="aurora"] .hero-title { padding-block: 44px 26px; }
+  .xt5-stair-note { width: 100%; gap: 18px; }
+}
+@media (max-width: 340px) {
+  .xt5-stair-note { grid-template-columns: 1fr; }
+  .xt5-stair-note .photo-reference { width: 53%; justify-self: end; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-case-enter="ready"] { animation: none; }
+  :root[data-case-enter="ready"] [data-arrive="title"] { --entry-delay: 24ms; }
+  :root[data-case-enter="ready"] [data-arrive="meta"] { --entry-delay: 88ms; }
+  :root[data-case-enter="ready"] [data-arrive="image"] { --entry-delay: 185ms; --image-duration: 310ms; }
+  :root[data-case-enter="ready"] [data-arrive="body"] { animation: none; }
+}
