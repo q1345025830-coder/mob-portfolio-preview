@@ -68,23 +68,6 @@ window.portfolioProjects = [
         "layout": "wide"
       },
       {
-        "id": "plan-a",
-        "src": "assets/images/xt5/plan-a-1600.jpg",
-        "srcset": "assets/images/xt5/plan-a-768.jpg 768w, assets/images/xt5/plan-a-1600.jpg 1600w, assets/images/xt5/plan-a-2560.jpg 2560w",
-        "full": "assets/images/xt5/plan-a-2560.jpg",
-        "width": 2560,
-        "height": 1440,
-        "alt": {
-          "zh": "XT5 蜂鸟部落三维渲染 — 空间顶视",
-          "en": "XT5 Hummingbird Tribe rendering — Space · overhead view"
-        },
-        "caption": {
-          "zh": "空间顶视",
-          "en": "Space · overhead view"
-        },
-        "layout": "wide"
-      },
-      {
         "id": "stage",
         "src": "assets/images/xt5/stage-1600.jpg",
         "srcset": "assets/images/xt5/stage-768.jpg 768w, assets/images/xt5/stage-1600.jpg 1600w, assets/images/xt5/stage-2560.jpg 2560w",
@@ -183,23 +166,6 @@ window.portfolioProjects = [
         "caption": {
           "zh": "雪地背景舞台",
           "en": "Stage · snow landscape"
-        },
-        "layout": "wide"
-      },
-      {
-        "id": "plan-b",
-        "src": "assets/images/xt5/plan-b-1600.jpg",
-        "srcset": "assets/images/xt5/plan-b-768.jpg 768w, assets/images/xt5/plan-b-1600.jpg 1600w, assets/images/xt5/plan-b-2560.jpg 2560w",
-        "full": "assets/images/xt5/plan-b-2560.jpg",
-        "width": 2560,
-        "height": 1440,
-        "alt": {
-          "zh": "XT5 蜂鸟部落三维渲染 — 空间顶视 · 另一画面",
-          "en": "XT5 Hummingbird Tribe rendering — Space · alternate overhead"
-        },
-        "caption": {
-          "zh": "空间顶视 · 另一画面",
-          "en": "Space · alternate overhead"
         },
         "layout": "wide"
       },

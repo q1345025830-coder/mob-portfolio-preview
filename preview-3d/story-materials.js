@@ -50,13 +50,15 @@
     }
     target.after(section);
   }
-  document.addEventListener('error', e => {
+  function offerRetry(e) {
     const im=e.target;
-    if(!(im instanceof HTMLImageElement) || !im.currentSrc || im.parentElement?.parentElement?.querySelector('.mob-retry')) return;
-    const holder=im.closest('figure') || im.parentElement;if(!holder)return;
+    if(!(im instanceof HTMLImageElement) || !im.currentSrc) return;
+    const holder=im.closest('figure') || im.parentElement;if(!holder || holder.querySelector('.mob-retry'))return;
     const retry=document.createElement('button');retry.className='mob-retry';retry.textContent='重新载入图片';
     retry.onclick=()=>{const u=new URL(im.currentSrc);u.searchParams.set('retry',Date.now());im.removeAttribute('srcset');im.src=u;retry.remove()};holder.append(retry);
-  },true);
+  }
+  document.addEventListener('error',offerRetry,true);
+  for(const im of document.querySelectorAll('main img[src]')) if(im.complete && !im.naturalWidth) offerRetry({target:im});
   if(location.pathname.includes('/review/'))new MutationObserver(enrich).observe(document.querySelector('main'),{childList:true});
   enrich();
 })();
