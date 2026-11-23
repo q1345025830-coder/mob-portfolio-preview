@@ -1,5 +1,6 @@
 {
-  "version": "preview-2026-11-23.1",
+  "version": "preview-2026-11-23.2",
   "productionBaseline": "244c03ff9e307335b65d2ed455e7f748287ae199",
+  "previousPreview": "ce7582d9b37ee01208ed34d1d6f1d9c436573d5a",
   "projects": 22
 }

@@ -2,9 +2,9 @@
   'use strict';
   const {projects,shorts}=window.reviewContent;
   // The public and local review data share media IDs, including responsive variants.
-  const excluded = new Set(['new-year-2','new-year-4','retail-2','retail-3','retail-4','yangshuo-4','anniversary-2','anniversary-4','ice-plan-a','ice-plan-b']);
+  const excluded = new Set(['new-year-4', 'retail-2', 'yangshuo-3']);
   for (const item of [...projects,...shorts]) {
-    const keep = image => !excluded.has(image.media);
+    const keep = image => !excluded.has(image.media) && !image.src?.includes('/studies/');
     item.sections = item.sections.map(section => ({...section, main:section.main.filter(keep), supporting:section.supporting.filter(keep)}))
       .filter(section => section.main.length || section.supporting.length);
     if (item.archive) item.archive = item.archive.filter(keep);
@@ -502,7 +502,7 @@
       '<div class="design-section"><h2 class="design-label eyebrow" id="design-heading" tabindex="-1">'+word('designHeading')+'</h2>'+
       chapters.map(renderChapter).join('')+'</div>'+
 
-      (p.short?'':'<section class="gallery" id="gallery"><header><h2 id="gallery-heading" tabindex="-1">'+word('gallery')+'</h2>'+(p.source?'<a href="'+p.source+'" target="_blank" rel="noopener">'+escape(tr(p.sourceLabel))+'</a>':'')+
+      (gallery.length<=1?'':'<section class="gallery" id="gallery"><header><h2 id="gallery-heading" tabindex="-1">'+word('gallery')+'</h2>'+(p.source?'<a href="'+p.source+'" target="_blank" rel="noopener">'+escape(tr(p.sourceLabel))+'</a>':'')+
         '</header><div class="gallery-grid">'+gallery.map((img,i)=>'<button type="button" data-image="'+i+'" aria-label="'+escape(word('open')+' · '+tr(img.caption))+'">'+picture(img,'(max-width: 760px) 28vw, 14vw')+'</button>').join('')+
         '</div></section>')+'</div></div>'+
       '<footer class="case-footer"><div class="frame case-footer-inner"><a class="back" href="#work"><span aria-hidden="true">‹</span> '+word('back')+'</a>'+

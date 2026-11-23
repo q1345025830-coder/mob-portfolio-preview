@@ -367,8 +367,17 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     const swatch = document.createElement('canvas');
     swatch.width = swatch.height = 3;
     const painter = swatch.getContext('2d');
-    painter.filter = "saturate(175%) brightness(165%)";
-    painter.drawImage(card.picture,0,0,3,3);
+    painter.drawImage(card.picture, 0, 0, 3, 3);
+    const field = painter.getImageData(0, 0, 3, 3);
+    for (let i = 0; i < field.data.length; i += 4) {
+      const luma = .2126 * field.data[i] + .7152 * field.data[i + 1] + .0722 * field.data[i + 2];
+      // Neutral or light covers still yield a dim background. Keep the original cover untouched.
+      const shade = 13 + Math.min(36, luma * .22);
+      for (let channel = 0; channel < 3; channel++) {
+        field.data[i + channel] = Math.max(8, Math.min(62, shade + (field.data[i + channel] - luma) * .28));
+      }
+    }
+    painter.putImageData(field, 0, 0);
     card.field ??= textureFor(gl);
     gl.bindTexture(gl.TEXTURE_2D, card.field);
     gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,swatch);
@@ -495,7 +504,7 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
         const flat=stage.dataset.hoverStyle==='flat';
         if (flat) gl.bindTexture(gl.TEXTURE_2D,solid);
         const tint = flat ? [.16, .31, .47] : [.94, .94, .97];
-        gl.uniform4f(tone, ...tint, level * .94);
+        gl.uniform4f(tone, ...tint, level * .90);
         gl.bufferSubData(gl.ARRAY_BUFFER,0,mesh);
         gl.drawElements(gl.TRIANGLES,indices.length,gl.UNSIGNED_SHORT,0);
       }

@@ -2,7 +2,7 @@
 window.portfolioProjectStories = {
   xt5: [
     {
-      main: 'stage-arrival', supporting: ['structure'], study: 'screen-planes',
+      main: 'installation-a', supporting: ['installation-b'], study: 'screen-planes',
       studyLabel: ['错层悬屏意象', 'Suspended screen study'],
       title: ['让影像有前后层次', 'Giving the screens depth'],
       copy: ['悬挂竖屏借错层与缝隙形成纵深。从另一侧看，后排画面会从缝隙里出现，观看方式也从正面看舞台变成绕着影像走。', 'Staggered heights and gaps give the suspended screens depth. The rear images come into view from the other side, turning a frontal stage view into an installation visitors can walk around.'],
@@ -64,7 +64,7 @@ window.portfolioProjectStories = {
       copy: ['咖啡侧用蓝光、招牌和吧台呈现城市一面；户外侧用暖橙色灯面、岩壁和皮划艇呈现另一种看车场景。两面围绕同一个展台展开。', 'Blue light, signage and the coffee counter set the urban scene. On the other side, an amber disc, rock face and kayak frame the car outdoors. Both scenes share one exhibition stand.'],
     },
     {
-      main: 'reverse', supporting: [],
+      main: 'reverse', supporting: ['plan'],
       title: ['从正反面读到整体', 'Reading the two faces as one stand'],
       copy: ['反向视角给出另一张展台立面，顶视图让两面陈列和中间体量的关系一眼可见。', 'The reverse view reveals the other façade. The top view shows how the two displays sit around the central volume.'],
     },
@@ -76,10 +76,10 @@ window.portfolioProjectStories = {
       copy: ['山路展车画面把 XT5 放到真实尺度的地貌语境里，湖畔夜景则把同一段旅程落到可以停留的营地。', 'The mountain-road scene places the XT5 against the scale of the landscape. The lakeside night view brings the journey to a camp where visitors can linger.'],
     },
     {
-      main: '08', supporting: ['01'], study: 'tibet',
+      main: '11', supporting: ['10'], study: 'tibet',
       studyLabel: ['地形线与包装纸 · 视觉参考', 'Contour lines and packaging paper · Visual reference'],
-      title: ['车旁的停留空间', 'From the camp to an object in hand'],
-      copy: ['全景用山地和帐篷建立活动氛围。草地留出了车旁停留的位置。', 'The landscape and tents set the atmosphere. The grass beside the vehicle leaves room to stop.'],
+      title: ['从营地到手里的礼盒', 'From the camp to an object in hand'],
+      copy: ['全景用山地和帐篷建立活动氛围。礼盒外观与开箱图把尺度收小，给这段旅程留下可以带走的细节。', 'The landscape and tents set the atmosphere. The packaging and unboxing views bring it down to the scale of something visitors can take home.'],
     },
   ],
   'hailar-ice-drive': [
@@ -90,9 +90,9 @@ window.portfolioProjectStories = {
       copy: ['冰体里的透光与镜面上的反射让雪地里的展车有清晰轮廓。材质意象提取冰层折射，项目原图呈现它在现场画面中的表达。', 'Light through the ice and reflections in the mirrors give the vehicle a clear silhouette in the snow. The material study isolates the quality of the light, while the project render shows it in context.'],
     },
     {
-      main: '07', supporting: ['08'],
+      main: '14', supporting: ['07'],
       title: ['从雪地进入暖棚', 'From the snow into the warming pavilion'],
-      copy: ['雪地画面以冷光为主，暖棚把观看尺度转向座席和屏幕。室内视角呈现人坐下来之后看到的空间。', 'Cold light dominates outside. In the pavilion, the focus moves to the seats and screen. The section reveals the layout, and the interior view shows what it feels like at seated eye level.'],
+      copy: ['雪地画面以冷光为主，暖棚把观看尺度转向座席和屏幕。剖面交代布局，室内视角呈现人坐下来之后看到的空间。', 'Cold light dominates outside. In the pavilion, the focus moves to the seats and screen. The section reveals the layout, and the interior view shows what it feels like at seated eye level.'],
     },
   ],
   'ct5-f1-track-drive': [
@@ -108,7 +108,19 @@ window.portfolioProjectStories = {
       copy: ['室内展车与座席视角并看，可以读出近距离看车和坐下观看时的尺度变化。', 'The indoor vehicle display and seating views show the difference between approaching the cars and watching from a seat.'],
     },
   ],
-  'volvo-xc70-exhibition': [],
+  'volvo-xc70-exhibition': [
+    {
+      main: '06', supporting: ['02'], study: 'xc70',
+      studyLabel: ['绿色展具 · 色彩参考', 'Green display blocks · Color reference'],
+      title: ['同一套视觉语言，两种展台尺度', 'One visual language at two display scales'],
+      copy: ['从双车到单车，绿色展具和克制的陈列留白延续了同一套视觉语言，车身数量改变后依然能读出同一个项目。', 'The green display elements and restrained spacing carry the visual language from two cars to one, keeping both configurations recognizable as part of the same project.'],
+    },
+    {
+      main: '05', supporting: ['08'],
+      title: ['让绿色展具衬出车身', 'Using green display elements to frame the car'],
+      copy: ['近景把绿色展具和车身放进同一构图，可以看清色块、立体字与车辆之间的距离。', 'Close views put the green display elements and vehicle in the same frame, revealing the spacing between the color blocks, dimensional lettering and bodywork.'],
+    },
+  ],
   'volvo-showroom-renovation': [
     {
       main: '04', supporting: ['02'],

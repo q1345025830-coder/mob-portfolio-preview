@@ -68,6 +68,40 @@ window.portfolioProjects = [
         "layout": "wide"
       },
       {
+        "id": "aerial-b",
+        "src": "assets/images/xt5/aerial-b-1600.jpg",
+        "srcset": "assets/images/xt5/aerial-b-768.jpg 768w, assets/images/xt5/aerial-b-1600.jpg 1600w, assets/images/xt5/aerial-b-2560.jpg 2560w",
+        "full": "assets/images/xt5/aerial-b-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "XT5 蜂鸟部落三维渲染 — 整体空间鸟瞰",
+          "en": "XT5 Hummingbird Tribe rendering — Overall space · aerial view"
+        },
+        "caption": {
+          "zh": "整体空间鸟瞰",
+          "en": "Overall space · aerial view"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "plan-a",
+        "src": "assets/images/xt5/plan-a-1600.jpg",
+        "srcset": "assets/images/xt5/plan-a-768.jpg 768w, assets/images/xt5/plan-a-1600.jpg 1600w, assets/images/xt5/plan-a-2560.jpg 2560w",
+        "full": "assets/images/xt5/plan-a-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "XT5 蜂鸟部落三维渲染 — 空间顶视",
+          "en": "XT5 Hummingbird Tribe rendering — Space · overhead view"
+        },
+        "caption": {
+          "zh": "空间顶视",
+          "en": "Space · overhead view"
+        },
+        "layout": "wide"
+      },
+      {
         "id": "stage",
         "src": "assets/images/xt5/stage-1600.jpg",
         "srcset": "assets/images/xt5/stage-768.jpg 768w, assets/images/xt5/stage-1600.jpg 1600w, assets/images/xt5/stage-2560.jpg 2560w",
@@ -81,6 +115,40 @@ window.portfolioProjects = [
         "caption": {
           "zh": "主舞台与屏幕阵列",
           "en": "Stage & screen array"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "installation-a",
+        "src": "assets/images/xt5/installation-a-1600.jpg",
+        "srcset": "assets/images/xt5/installation-a-768.jpg 768w, assets/images/xt5/installation-a-1600.jpg 1600w, assets/images/xt5/installation-a-2560.jpg 2560w",
+        "full": "assets/images/xt5/installation-a-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "XT5 蜂鸟部落三维渲染 — 悬挂屏幕装置 · 视角一",
+          "en": "XT5 Hummingbird Tribe rendering — Suspended screens · view 01"
+        },
+        "caption": {
+          "zh": "悬挂屏幕装置 · 视角一",
+          "en": "Suspended screens · view 01"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "installation-b",
+        "src": "assets/images/xt5/installation-b-1600.jpg",
+        "srcset": "assets/images/xt5/installation-b-768.jpg 768w, assets/images/xt5/installation-b-1600.jpg 1600w, assets/images/xt5/installation-b-2560.jpg 2560w",
+        "full": "assets/images/xt5/installation-b-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "XT5 蜂鸟部落三维渲染 — 悬挂屏幕装置 · 视角二",
+          "en": "XT5 Hummingbird Tribe rendering — Suspended screens · view 02"
+        },
+        "caption": {
+          "zh": "悬挂屏幕装置 · 视角二",
+          "en": "Suspended screens · view 02"
         },
         "layout": "wide"
       },
@@ -166,6 +234,40 @@ window.portfolioProjects = [
         "caption": {
           "zh": "雪地背景舞台",
           "en": "Stage · snow landscape"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "aerial-a",
+        "src": "assets/images/xt5/aerial-a-1600.jpg",
+        "srcset": "assets/images/xt5/aerial-a-768.jpg 768w, assets/images/xt5/aerial-a-1600.jpg 1600w, assets/images/xt5/aerial-a-2560.jpg 2560w",
+        "full": "assets/images/xt5/aerial-a-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "XT5 蜂鸟部落三维渲染 — 整体空间鸟瞰 · 另一视角",
+          "en": "XT5 Hummingbird Tribe rendering — Overall space · alternate aerial"
+        },
+        "caption": {
+          "zh": "整体空间鸟瞰 · 另一视角",
+          "en": "Overall space · alternate aerial"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "plan-b",
+        "src": "assets/images/xt5/plan-b-1600.jpg",
+        "srcset": "assets/images/xt5/plan-b-768.jpg 768w, assets/images/xt5/plan-b-1600.jpg 1600w, assets/images/xt5/plan-b-2560.jpg 2560w",
+        "full": "assets/images/xt5/plan-b-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "XT5 蜂鸟部落三维渲染 — 空间顶视 · 另一画面",
+          "en": "XT5 Hummingbird Tribe rendering — Space · alternate overhead"
+        },
+        "caption": {
+          "zh": "空间顶视 · 另一画面",
+          "en": "Space · alternate overhead"
         },
         "layout": "wide"
       },
@@ -409,6 +511,23 @@ window.portfolioProjects = [
         "caption": {
           "zh": "整体空间 · 正面",
           "en": "Overall space · front view"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "plan",
+        "src": "assets/images/mobile-showroom/plan-1600.jpg",
+        "srcset": "assets/images/mobile-showroom/plan-768.jpg 768w, assets/images/mobile-showroom/plan-1600.jpg 1600w, assets/images/mobile-showroom/plan-2560.jpg 2560w",
+        "full": "assets/images/mobile-showroom/plan-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "2026 凯迪拉克移动展厅三维渲染 — 展厅顶视布局",
+          "en": "2026 Cadillac Mobile Showroom rendering — Showroom · overhead layout"
+        },
+        "caption": {
+          "zh": "展厅顶视布局",
+          "en": "Showroom · overhead layout"
         },
         "layout": "wide"
       },
@@ -980,6 +1099,23 @@ window.portfolioProjects = [
         "layout": "wide"
       },
       {
+        "id": "plan",
+        "src": "assets/images/ct6-outreach/plan-1600.jpg",
+        "srcset": "assets/images/ct6-outreach/plan-768.jpg 768w, assets/images/ct6-outreach/plan-1600.jpg 1600w, assets/images/ct6-outreach/plan-2560.jpg 1672w",
+        "full": "assets/images/ct6-outreach/plan-2560.jpg",
+        "width": 1672,
+        "height": 941,
+        "alt": {
+          "zh": "CT6 创意外展项目效果图 — 展台顶视布局",
+          "en": "CT6 Creative Exhibition visual — Display · overhead layout"
+        },
+        "caption": {
+          "zh": "展台顶视布局",
+          "en": "Display · overhead layout"
+        },
+        "layout": "wide"
+      },
+      {
         "id": "vehicle-a",
         "src": "assets/images/ct6-outreach/vehicle-a-1600.jpg",
         "srcset": "assets/images/ct6-outreach/vehicle-a-768.jpg 768w, assets/images/ct6-outreach/vehicle-a-1600.jpg 1600w, assets/images/ct6-outreach/vehicle-a-2560.jpg 1672w",
@@ -1238,6 +1374,23 @@ window.portfolioProjects = [
         "caption": {
           "zh": "整体展台 · 户外区视角",
           "en": "Overall display · outdoor side"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "plan",
+        "src": "assets/images/changsha/plan-1600.jpg",
+        "srcset": "assets/images/changsha/plan-768.jpg 768w, assets/images/changsha/plan-1600.jpg 1600w, assets/images/changsha/plan-2560.jpg 1672w",
+        "full": "assets/images/changsha/plan-2560.jpg",
+        "width": 1672,
+        "height": 941,
+        "alt": {
+          "zh": "CADILLAC 长沙创意外展项目效果图 — 双面展台顶视布局",
+          "en": "Cadillac Changsha Creative Exhibition visual — Two-sided display · overhead"
+        },
+        "caption": {
+          "zh": "双面展台顶视布局",
+          "en": "Two-sided display · overhead"
         },
         "layout": "wide"
       },
@@ -1562,6 +1715,57 @@ window.portfolioProjects = [
           "en": "Campsite lighting"
         },
         "layout": "wide"
+      },
+      {
+        "id": "09",
+        "src": "assets/images/xt5-tibet/09-1600.jpg",
+        "srcset": "assets/images/xt5-tibet/09-768.jpg 768w, assets/images/xt5-tibet/09-1600.jpg 1600w, assets/images/xt5-tibet/09-2560.jpg 2560w",
+        "full": "assets/images/xt5-tibet/09-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "XT5 西藏自驾 — 营地鸟瞰",
+          "en": "XT5 Tibet Road Trip — Aerial view of the campsite"
+        },
+        "caption": {
+          "zh": "营地鸟瞰",
+          "en": "Aerial view of the campsite"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "10",
+        "src": "assets/images/xt5-tibet/10-1600.jpg",
+        "srcset": "assets/images/xt5-tibet/10-768.jpg 768w, assets/images/xt5-tibet/10-1600.jpg 1600w, assets/images/xt5-tibet/10-2560.jpg 1672w",
+        "full": "assets/images/xt5-tibet/10-2560.jpg",
+        "width": 1672,
+        "height": 941,
+        "alt": {
+          "zh": "XT5 西藏自驾 — 礼盒外观",
+          "en": "XT5 Tibet Road Trip — Gift box exterior"
+        },
+        "caption": {
+          "zh": "礼盒外观",
+          "en": "Gift box exterior"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "11",
+        "src": "assets/images/xt5-tibet/11-1600.jpg",
+        "srcset": "assets/images/xt5-tibet/11-768.jpg 768w, assets/images/xt5-tibet/11-1600.jpg 1600w, assets/images/xt5-tibet/11-2560.jpg 1672w",
+        "full": "assets/images/xt5-tibet/11-2560.jpg",
+        "width": 1672,
+        "height": 941,
+        "alt": {
+          "zh": "XT5 西藏自驾 — 礼盒开箱",
+          "en": "XT5 Tibet Road Trip — Gift box unboxing"
+        },
+        "caption": {
+          "zh": "礼盒开箱",
+          "en": "Gift box unboxing"
+        },
+        "layout": "wide"
       }
     ],
     "sections": [
@@ -1808,6 +2012,40 @@ window.portfolioProjects = [
         "layout": "wide"
       },
       {
+        "id": "09",
+        "src": "assets/images/hailar-ice-drive/09-1600.jpg",
+        "srcset": "assets/images/hailar-ice-drive/09-768.jpg 768w, assets/images/hailar-ice-drive/09-1600.jpg 1600w, assets/images/hailar-ice-drive/09-2560.jpg 1672w",
+        "full": "assets/images/hailar-ice-drive/09-2560.jpg",
+        "width": 1672,
+        "height": 941,
+        "alt": {
+          "zh": "海拉尔冰雪试驾 · 休息模式鸟瞰",
+          "en": "Hailar Ice and Snow Test Drive · Aerial view of the lounge layout"
+        },
+        "caption": {
+          "zh": "休息模式鸟瞰",
+          "en": "Aerial view of the lounge layout"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "10",
+        "src": "assets/images/hailar-ice-drive/10-1600.jpg",
+        "srcset": "assets/images/hailar-ice-drive/10-768.jpg 768w, assets/images/hailar-ice-drive/10-1600.jpg 1600w, assets/images/hailar-ice-drive/10-2560.jpg 1672w",
+        "full": "assets/images/hailar-ice-drive/10-2560.jpg",
+        "width": 1672,
+        "height": 941,
+        "alt": {
+          "zh": "海拉尔冰雪试驾 · 会议模式鸟瞰",
+          "en": "Hailar Ice and Snow Test Drive · Aerial view of the conference layout"
+        },
+        "caption": {
+          "zh": "会议模式鸟瞰",
+          "en": "Aerial view of the conference layout"
+        },
+        "layout": "wide"
+      },
+      {
         "id": "13",
         "src": "assets/images/hailar-ice-drive/13-1600.jpg",
         "srcset": "assets/images/hailar-ice-drive/13-768.jpg 768w, assets/images/hailar-ice-drive/13-1600.jpg 1600w, assets/images/hailar-ice-drive/13-2560.jpg 1672w",
@@ -1821,6 +2059,23 @@ window.portfolioProjects = [
         "caption": {
           "zh": "暖棚主视觉",
           "en": "Warming pavilion hero view"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "14",
+        "src": "assets/images/hailar-ice-drive/14-1600.jpg",
+        "srcset": "assets/images/hailar-ice-drive/14-768.jpg 768w, assets/images/hailar-ice-drive/14-1600.jpg 1600w, assets/images/hailar-ice-drive/14-2560.jpg 1672w",
+        "full": "assets/images/hailar-ice-drive/14-2560.jpg",
+        "width": 1672,
+        "height": 941,
+        "alt": {
+          "zh": "海拉尔冰雪试驾 · 暖棚剖面全景",
+          "en": "Hailar Ice and Snow Test Drive · Warming pavilion sectional panorama"
+        },
+        "caption": {
+          "zh": "暖棚剖面全景",
+          "en": "Warming pavilion sectional panorama"
         },
         "layout": "wide"
       },
@@ -2323,18 +2578,120 @@ window.portfolioProjects = [
     "images": [
       {
         "id": "01",
-        "src": "preview-3d/xc-title.svg",
-        "srcset": "",
-        "full": "preview-3d/xc-title.svg",
+        "src": "assets/images/volvo-xc70-exhibition/01-1600.jpg",
+        "srcset": "assets/images/volvo-xc70-exhibition/01-768.jpg 768w, assets/images/volvo-xc70-exhibition/01-1600.jpg 1600w, assets/images/volvo-xc70-exhibition/01-2560.jpg 1672w",
+        "full": "assets/images/volvo-xc70-exhibition/01-2560.jpg",
         "width": 1672,
         "height": 941,
         "alt": {
-          "zh": "XC70 商展",
-          "en": "XC70 exhibition"
+          "zh": "沃尔沃 XC70 商展 · 双车展区主视觉",
+          "en": "Volvo XC70 Exhibition · Two-car display hero view"
         },
         "caption": {
-          "zh": "XC70 商展",
-          "en": "XC70 exhibition"
+          "zh": "双车展区主视觉",
+          "en": "Two-car display hero view"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "02",
+        "src": "assets/images/volvo-xc70-exhibition/02-1600.jpg",
+        "srcset": "assets/images/volvo-xc70-exhibition/02-768.jpg 768w, assets/images/volvo-xc70-exhibition/02-1600.jpg 1600w, assets/images/volvo-xc70-exhibition/02-2560.jpg 2560w",
+        "full": "assets/images/volvo-xc70-exhibition/02-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "沃尔沃 XC70 商展 · 双车展区另一视角",
+          "en": "Volvo XC70 Exhibition · Two-car display from the reverse angle"
+        },
+        "caption": {
+          "zh": "双车展区另一视角",
+          "en": "Two-car display from the reverse angle"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "04",
+        "src": "assets/images/volvo-xc70-exhibition/03-1600.jpg",
+        "srcset": "assets/images/volvo-xc70-exhibition/03-768.jpg 768w, assets/images/volvo-xc70-exhibition/03-1600.jpg 1600w, assets/images/volvo-xc70-exhibition/03-2560.jpg 2560w",
+        "full": "assets/images/volvo-xc70-exhibition/03-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "沃尔沃 XC70 商展 · 展车与立体字",
+          "en": "Volvo XC70 Exhibition · Vehicle and dimensional lettering"
+        },
+        "caption": {
+          "zh": "展车与立体字",
+          "en": "Vehicle and dimensional lettering"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "05",
+        "src": "assets/images/volvo-xc70-exhibition/04-1600.jpg",
+        "srcset": "assets/images/volvo-xc70-exhibition/04-768.jpg 768w, assets/images/volvo-xc70-exhibition/04-1600.jpg 1600w, assets/images/volvo-xc70-exhibition/04-2560.jpg 2560w",
+        "full": "assets/images/volvo-xc70-exhibition/04-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "沃尔沃 XC70 商展 · 车辆与绿色展具",
+          "en": "Volvo XC70 Exhibition · Vehicle and green exhibition fixtures"
+        },
+        "caption": {
+          "zh": "车辆与绿色展具",
+          "en": "Vehicle and green exhibition fixtures"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "06",
+        "src": "assets/images/volvo-xc70-exhibition/05-1600.jpg",
+        "srcset": "assets/images/volvo-xc70-exhibition/05-768.jpg 768w, assets/images/volvo-xc70-exhibition/05-1600.jpg 1600w, assets/images/volvo-xc70-exhibition/05-2560.jpg 2560w",
+        "full": "assets/images/volvo-xc70-exhibition/05-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "沃尔沃 XC70 商展 · 单车展区全景",
+          "en": "Volvo XC70 Exhibition · Single-car display overview"
+        },
+        "caption": {
+          "zh": "单车展区全景",
+          "en": "Single-car display overview"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "07",
+        "src": "assets/images/volvo-xc70-exhibition/06-1600.jpg",
+        "srcset": "assets/images/volvo-xc70-exhibition/06-768.jpg 768w, assets/images/volvo-xc70-exhibition/06-1600.jpg 1600w, assets/images/volvo-xc70-exhibition/06-2560.jpg 2560w",
+        "full": "assets/images/volvo-xc70-exhibition/06-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "沃尔沃 XC70 商展 · 单车侧面陈列",
+          "en": "Volvo XC70 Exhibition · Single-car side view"
+        },
+        "caption": {
+          "zh": "单车侧面陈列",
+          "en": "Single-car side view"
+        },
+        "layout": "wide"
+      },
+      {
+        "id": "08",
+        "src": "assets/images/volvo-xc70-exhibition/07-1600.jpg",
+        "srcset": "assets/images/volvo-xc70-exhibition/07-768.jpg 768w, assets/images/volvo-xc70-exhibition/07-1600.jpg 1600w, assets/images/volvo-xc70-exhibition/07-2560.jpg 2560w",
+        "full": "assets/images/volvo-xc70-exhibition/07-2560.jpg",
+        "width": 2560,
+        "height": 1440,
+        "alt": {
+          "zh": "沃尔沃 XC70 商展 · 单车展区细节",
+          "en": "Volvo XC70 Exhibition · Single-car display detail"
+        },
+        "caption": {
+          "zh": "单车展区细节",
+          "en": "Single-car display detail"
         },
         "layout": "wide"
       }

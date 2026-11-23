@@ -1,5 +1,4 @@
 (() => {
-  const base = new URL('.', document.currentScript.src);
   const catalog = window.mobResearch;
   const root = document.documentElement;
   function projectId() {
@@ -31,24 +30,10 @@
     if (!record) return;
     root.style.setProperty('--mob-tone',record.tone);
     const main = document.querySelector('main');
-    if (!main || main.querySelector('.mob-references')) return;
-    const target = main.querySelector('.chapter, .editorial-story, .story, .image-section') || main.querySelector('.opening-view, .case-heading');
-    if (!target) return;
-    prepare(main.querySelector('img'));
-    const section = document.createElement('section');
-    section.className = 'mob-references';
-    const heading = document.createElement('h2');heading.textContent = '视觉参考';section.append(heading);
-    const group = document.createElement('div'); group.className='mob-reference-grid';section.append(group);
-    for(const [asset, caption, author, url, license] of record.references){
-      const figure=document.createElement('figure'), image=document.createElement('img');
-      image.src=new URL('research/'+asset+'.webp',base);image.loading='lazy';image.alt=caption;image.width=720;image.height=450;
-      const text=document.createElement('figcaption');text.textContent=caption;
-      const source=document.createElement('a');source.href='https://polyhaven.com/a/'+asset;source.textContent='Poly Haven · '+asset.replaceAll('_',' ')+' · CC0';
-      if(author){source.href=url;source.textContent=author+' · '+license;}
-      text.append(source);
-      if(license==='CC BY-SA 2.0'){const terms=document.createElement('a');terms.href='https://creativecommons.org/licenses/by-sa/2.0/';terms.textContent='同许可缩放转码';text.append(terms);}figure.append(image,text);group.append(figure);
-    }
-    target.after(section);
+    if (!main) return;
+    const image = main.querySelector('img');
+    if (image && !image.classList.contains('mob-loaded')) prepare(image);
+
   }
   function offerRetry(e) {
     const im=e.target;
