@@ -54,7 +54,6 @@
   const moduleRoot = new URL(".", document.currentScript.src);
   const workUrl = new URL("index.html", moduleRoot);
   const reviewPage = location.pathname.includes('/review/');
-  const signature = reviewPage && document.querySelector('.topbar .signature')?.cloneNode(true);
   const logos = {CADILLAC:['cadillac-crest.svg','cadillac'], VOLVO:['volvo-wordmark.svg#dark','volvo']};
   const referrer = document.referrer && new URL(document.referrer);
   if (referrer && referrer.origin === workUrl.origin && referrer.pathname === workUrl.pathname && history.length > 1) {
@@ -62,13 +61,10 @@
   }
 
   function installBrandReturn(id, record) {
-    const header = document.querySelector('.case-header, .site-bar, .header, .topbar');
+    const header = document.querySelector(reviewPage ? '.case-tools' : '.case-header, .site-bar, .header');
     if (!header) return;
     const old = header.querySelector('[data-brand-return]');
-    if (!id) {
-      if (old && signature) old.replaceWith(signature.cloneNode(true));
-      return;
-    }
+    if (!id) return;
     if (old?.dataset.brandReturn === id) return;
     const review = window.reviewContent;
     const projects = [...(window.portfolioProjects || []), ...(review?.projects || []), ...(review?.shorts || [])];
@@ -93,7 +89,7 @@
         history.back();
       }
     });
-    const original = old || header.querySelector(':scope > .brand-logo, :scope > .mark, :scope > .wordmark, .topbar-inner > .signature');
+    const original = old || header.querySelector(':scope > .brand-logo, :scope > .mark, :scope > .wordmark, :scope > .back');
     if (original) original.replaceWith(link);
     else header.prepend(link);
   }
