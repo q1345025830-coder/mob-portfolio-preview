@@ -19,13 +19,18 @@
   root.dataset.mobArrival = 'holding';
   if (intent.color && CSS.supports('color', intent.color)) root.style.setProperty('--mob-handoff', intent.color);
 
-  function start() {
+  let started = false;
+  function start(final = false) {
+    if (started) return;
     const heading = document.querySelector('main h1');
+    const hero = document.querySelector('main :is(.opening-view, .hero-figure, .case-screen, article > figure:first-of-type)');
+    if (!final && (!heading || !hero?.querySelector('img'))) return;
+    started = true;
+    observer.disconnect();
     if (!heading || reduced.matches) {
       delete root.dataset.mobArrival;
       return;
     }
-    const hero = document.querySelector('main :is(.opening-view, .hero-figure, .case-screen, article > figure:first-of-type)');
     const title = heading.closest('[data-arrive="title"]') || heading;
     const metadata = document.querySelectorAll('main :is([data-arrive="meta"], .detail-head .discipline, .case-headline, .case-heading .facts)');
     title.dataset.mobPhase = 'title';
@@ -53,7 +58,9 @@
       release();
     }));
   }
-  addEventListener('DOMContentLoaded', start, { once: true });
+  const observer = new MutationObserver(() => start());
+  observer.observe(root, { childList: true, subtree: true });
+  addEventListener('DOMContentLoaded', () => start(true), { once: true });
   addEventListener('pageshow', event => {
     if (event.persisted) delete root.dataset.mobArrival;
   });
