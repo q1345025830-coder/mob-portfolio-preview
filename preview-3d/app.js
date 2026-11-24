@@ -433,8 +433,9 @@ function exitToProject(link) {
   curtain.className = 'mob-entry-curtain';
   curtain.setAttribute('aria-hidden', 'true');
   const title = links.find(card => card.dataset.project === link.dataset.project)?.querySelector('.project-meta.name')?.textContent.trim();
+  let heading;
   if (title) {
-    const heading = document.createElement('span');
+    heading = document.createElement('span');
     heading.className = 'mob-handoff-title';
     heading.textContent = title;
     curtain.append(heading);
@@ -465,10 +466,19 @@ function exitToProject(link) {
     location.assign(url.href);
   }
   function covered() {
-    if (sent || leaving !== link) return;
+    if (sent || leaving !== link || curtain.classList.contains('is-covered')) return;
     curtain.classList.add('is-covered');
-    // Give the browser a paint opportunity at full coverage before it begins navigation.
-    requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(navigate)));
+    const deadline = performance.now() + 160;
+    // Keep this document on screen until the title has started painting over the color.
+    function holdForTitle() {
+      if (sent || leaving !== link) return;
+      if (heading && Number(getComputedStyle(heading).opacity) < .25 && performance.now() < deadline) {
+        requestAnimationFrame(holdForTitle);
+        return;
+      }
+      requestAnimationFrame(() => requestAnimationFrame(navigate));
+    }
+    requestAnimationFrame(holdForTitle);
   }
   curtain.addEventListener('animationend', covered, { once: true });
   curtain.addEventListener('animationcancel', covered, { once: true });

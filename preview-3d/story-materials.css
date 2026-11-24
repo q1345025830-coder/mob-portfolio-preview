@@ -114,14 +114,14 @@ html[data-mob-project]:not([data-mob-project=""]) .topbar { background: linear-g
   html[data-mob-arrival="holding"] main { opacity: 0; }
   html[data-mob-arrival] [data-arrive] { animation: none; opacity: 1; transform: none; }
   html[data-mob-arrival="playing"] [data-mob-phase="title"] {
-    animation: mob-destination-title 215ms cubic-bezier(.2,.65,.3,1) 20ms both;
+    animation: mob-destination-title 215ms cubic-bezier(.2,.65,.3,1) 98ms both;
   }
   html[data-mob-arrival="playing"] [data-mob-phase="meta"] {
-    animation: mob-destination-title 230ms ease-out 89ms both;
+    animation: mob-destination-title 230ms ease-out 167ms both;
   }
   html[data-mob-arrival="playing"] [data-mob-hero="waiting"] { opacity: 0; }
   html[data-mob-arrival="playing"] [data-mob-phase="hero"]:not([data-mob-hero="waiting"]) {
-    animation: mob-destination-image 290ms ease-out 155ms both;
+    animation: mob-destination-image 290ms ease-out 233ms both;
   }
   .mob-arrival-bridge {
     position: fixed;
@@ -132,7 +132,7 @@ html[data-mob-project]:not([data-mob-project=""]) .topbar { background: linear-g
     pointer-events: none;
   }
   .mob-arrival-bridge.is-review { background: transparent; }
-  .mob-arrival-bridge.is-clearing { animation: mob-handoff-dissolve 165ms ease both; }
+  .mob-arrival-bridge.is-clearing { animation: mob-handoff-dissolve 145ms ease both; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mob-arrival-bridge { display: none; }

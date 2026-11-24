@@ -653,8 +653,8 @@ body:not(.is-spatial) #work-grid { padding-bottom: 18px; }
 .mob-entry-curtain .mob-handoff-title {
   opacity: 0;
 }
-.mob-entry-curtain.is-covered .mob-handoff-title {
-  animation: mob-handoff-title-in 280ms cubic-bezier(.2,.65,.3,1) both;
+.mob-entry-curtain.is-rising .mob-handoff-title {
+  animation: mob-handoff-title-in 280ms cubic-bezier(.2,.65,.3,1) 355ms both;
 }
 @keyframes mob-handoff-title-in {
   from { opacity: 0; transform: translateY(9px); }
