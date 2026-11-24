@@ -83,3 +83,25 @@
 [data-case-theme="outdoor"] { --case-tone: #242922; }
 
 [data-case-theme="phev-drive"] { --case-tone: #292520; }
+
+[data-case-theme="cadillac-fengfan-outdoor"] {
+  --case-tone: #262422;
+  --case-panel: #2d3035;
+  --case-rule: #f4eee533;
+  --case-accent: #ed786c;
+}
+
+@media (min-width: 900px) {
+  [data-case-theme="cadillac-fengfan-outdoor"] .case-editorial .hero-title {
+    padding-block: clamp(38px, 6svh, 68px) clamp(26px, 4svh, 44px);
+  }
+  [data-case-theme="cadillac-fengfan-outdoor"] .hero-title :is(.title-model, .title-name) {
+    display: inline;
+  }
+  [data-case-theme="cadillac-fengfan-outdoor"] .hero-title .title-name {
+    margin-inline-start: .13em;
+  }
+}
+[data-case-theme="cadillac-fengfan-outdoor"] .case-inline-reference + .pair {
+  margin-top: clamp(26px, 4.4vw, 64px);
+}

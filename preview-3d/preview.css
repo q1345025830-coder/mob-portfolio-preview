@@ -657,3 +657,28 @@ body:not(.is-spatial) #work-grid { padding-bottom: 18px; }
   mask-image: linear-gradient(black 0%,rgba(0,0,0,.75) 43%,transparent);
   pointer-events: none;
 }
+
+/* The logo is decorative here. The brand text also supplies the list metadata. */
+.project-meta .brand-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.project-meta .corner-logo { display: block; width: clamp(23px, 2.2vw, 34px); height: auto; max-width: 100%; filter: brightness(0) invert(.93); }
+.project-meta .corner-logo--volvo { width: clamp(38px, 3.6vw, 67px); }
+.project-meta.name > span { font-family: var(--mono), "Microsoft YaHei UI", sans-serif; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.project-meta.kind > span { font-family: var(--mono), "Microsoft YaHei UI", sans-serif; letter-spacing: -.025em; }
+.project-meta.year > span { font-variant-numeric: tabular-nums; }
+@media (max-width: 680px) {
+  .is-ready .project-meta.name { font-size: clamp(8.5px, 2.2vw, 10px); line-height: 1.18; }
+  .is-ready .corner-logo--cadillac { width: 25px; }
+  .is-ready .corner-logo--volvo { width: 42px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  body[data-case-transition="active"]::after {
+    content: ""; position: fixed; inset: 0; z-index: 10; pointer-events: none;
+    background: var(--case-tone, #252423);
+    animation: mob-case-rise 260ms cubic-bezier(.45,.06,.25,1) both;
+  }
+  body[data-case-transition="active"] .is-case-leaving :is(.scene,.projects) {
+    opacity: .35; transform: scale(.975);
+    transition: transform 260ms ease, opacity 260ms ease;
+  }
+}
+@keyframes mob-case-rise { from { clip-path: inset(100% 0 0); } to { clip-path: inset(0); } }

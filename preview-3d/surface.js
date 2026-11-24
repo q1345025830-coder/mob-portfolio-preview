@@ -20,6 +20,10 @@ const fragmentSource = `
 `;
 
 const gridColumns = 5;
+const hoverTint = [.94, .94, .97];
+const hoverContrast = 1.8;
+// Matches the background beneath the transparent WebGL scene in preview.css.
+const gridBackground = 10;
 
 export const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 const wrap = (value, count) => ((value % count) + count) % count;
@@ -28,6 +32,7 @@ export function layoutFor(width, height, projectIds) {
   const narrow = width <= 680;
   const stepX = narrow ? Math.max(1, width * .51) : clamp(width * .248, 242, 555);
   const stepY = narrow ? Math.max(height * .365, 162) : clamp(height * .365, 217, 410);
+  const wide = narrow ? 0 : clamp((width / height - 1.36) / .6, 0, 1);
   const columns = Math.min(gridColumns, projectIds.length);
   const rows = Math.ceil(projectIds.length / columns);
   // Fill the short last row with existing projects so both edges tile continuously.
@@ -35,7 +40,7 @@ export function layoutFor(width, height, projectIds) {
     projectIds[i] ?? projectIds[(i * 7) % projectIds.length]);
   const rowEdges = Array.from({length: rows+1}, (_, i) => narrow || i <= 1 ? i - 1 : i - .75);
   const periodY = rowEdges.at(-1) - rowEdges[0];
-  return {width,height,narrow,stepX,stepY,columns,rows,slots,rowEdges,periodY,
+  return {width,height,narrow,wide,stepX,stepY,columns,rows,slots,rowEdges,periodY,
     homeX:narrow ? .5 : (columns-1)/2,homeY:narrow ? 1 : 0};
 }
 
@@ -76,7 +81,7 @@ function tileContent(tile, aspect, narrow) {
   const { cell } = tile;
   const insetX = narrow ? 7 : 15;
   const insetY = narrow ? 7 : 11;
-  const upperHeight = narrow ? 38 : 36;
+  const upperHeight = narrow ? 40 : 38;
   const lowerHeight = narrow ? 22 : 29;
   const gap = narrow ? 4 : 8;
   const bounds = {
@@ -91,7 +96,7 @@ function tileContent(tile, aspect, narrow) {
   const left = clamp(tile.x - width / 2, bounds.left, bounds.right - width);
   const top = clamp(tile.y - height / 2, artTop, artBottom - height);
   const art = { left, right: left + width, top, bottom: top + height };
-  const split = bounds.left + widthInside * .40;
+  const split = bounds.left + widthInside * .32;
   const upper = { top: bounds.top, bottom: bounds.top + upperHeight };
   const lower = { top: bounds.bottom - lowerHeight, bottom: bounds.bottom };
   const corners = [
@@ -104,19 +109,20 @@ function tileContent(tile, aspect, narrow) {
 }
 
 
-function project(x, y, layout, view) {
-  const { width, height, narrow, stepX, stepY } = layout;
+export function project(x, y, layout, view) {
+  const { width, height, narrow, wide, stepX, stepY } = layout;
   const zoom = 1 / (1 + view.pull * (narrow ? .045 : .145));
   const dx = (x - view.x * stepX + view.driftX) * zoom;
   const dy = (y - view.y * stepY + view.driftY) * zoom;
   const u = (dx / (width * .54)) ** 2;
   const v = (dy / (height * .68)) ** 2;
   const scale = 1 / (1 + (narrow ? .070 : .168) * u / (1 + .63 * u) + (narrow ? .020 : .044) * v / (1 + .40 * v));
-  const horizontal = dx * scale;
+  const crossBend = narrow ? .051 : .19 + .19 * wide;
+  const horizontal = dx * scale * (1 + crossBend * v / (.76 + v));
   const edge = Math.min(1.65, (2 * horizontal / width) ** 2);
   const fromSeam = y - view.y * stepY;
   const bend = fromSeam / (1 + .32 * (fromSeam / stepY) ** 2);
-  const bow = bend * zoom * edge * (narrow ? .055 : .192);
+  const bow = bend * zoom * edge * (narrow ? .072 : .22 + .12 * wide);
   // Keep the lens centered on the viewport as the repeated plane moves beneath it.
   return {
     x: width * .5 + horizontal,
@@ -313,14 +319,14 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
   const line = new Float32Array(guidePoints * 4);
   const cards = links.map(link => ({
     link, id: link.dataset.project,
-    texture: null, picture: link.querySelector('img'),
+    texture: null, picture: link.querySelector('.artwork img'),
     artwork: link.querySelector('.artwork'), labels: [...link.querySelectorAll('.project-meta')],
   }));
   // Embed a small RGB copy of each cover so the first painted frame has imagery.
   for (const card of cards) {
     const pixels = Uint8Array.from(atob(card.picture.dataset.pixels), value => value.charCodeAt(0));
     card.texture = textureFor(gl);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 32, 20, 0, gl.RGB, gl.UNSIGNED_BYTE, pixels);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 16, 10, 0, gl.RGB, gl.UNSIGNED_BYTE, pixels);
   }
   const byId = new Map(cards.map(card => [card.id,card]));
   const copies = new Map();
@@ -347,23 +353,42 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     copies.set(key,entry);
     return entry;
   }
-  let pending = 0;
+  let pending = 0, backgroundPending = 0;
 
   const finishRequest = card => {
-    if (card.pending) pending--;
-    card.pending = false;
+    if (card.pending) {
+      pending--;
+      if (card.pending === 'nearby') backgroundPending--;
+    }
+    card.pending = null;
   };
-  const upload = card => {
-    if (signal.aborted || gl.isContextLost()) return;
-    finishRequest(card);
-    card.texture ??= textureFor(gl);
+  function replaceTexture(card, image) {
+    if (signal.aborted || gl.isContextLost()) return false;
     try {
       gl.bindTexture(gl.TEXTURE_2D, card.texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, card.picture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      return true;
     } catch {
       onFallback();
-      return;
+      return false;
     }
+  }
+
+  function loadPreview(card) {
+    const source = card.picture.dataset.preview;
+    if (card.previewStarted || card.loaded || !source) return;
+    card.previewStarted = true;
+    const preview = new Image();
+    preview.dataset.coverProject = card.id;
+    preview.addEventListener('load', () => {
+      if (!card.loaded && replaceTexture(card, preview)) onRedraw();
+    }, { once: true, signal });
+    preview.src = source;
+  }
+
+  const upload = card => {
+    finishRequest(card);
+    if (!replaceTexture(card, card.picture)) return;
     const swatch = document.createElement('canvas');
     swatch.width = swatch.height = 3;
     const painter = swatch.getContext('2d');
@@ -374,7 +399,10 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
       // Neutral or light covers still yield a dim background. Keep the original cover untouched.
       const shade = 13 + Math.min(36, luma * .22);
       for (let channel = 0; channel < 3; channel++) {
-        field.data[i + channel] = Math.max(8, Math.min(62, shade + (field.data[i + channel] - luma) * .28));
+        const previous = clamp(shade + (field.data[i + channel] - luma) * .28, 8, 62);
+        // Compensate for the tint so the blended hover pixel is 1.8× farther from the resting color.
+        const base = gridBackground / hoverTint[channel];
+        field.data[i + channel] = base + (previous - base) * hoverContrast;
       }
     }
     painter.putImageData(field, 0, 0);
@@ -396,7 +424,7 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
         card.retried = true;
         setTimeout(() => {
           if (signal.aborted) return;
-          const url = new URL(card.picture.dataset.src, document.baseURI);
+          const url = new URL(card.picture.currentSrc || card.source || card.picture.dataset.src, document.baseURI);
           url.searchParams.set('retry', '1');
           card.picture.removeAttribute('srcset');
           card.picture.src = url.href;
@@ -418,17 +446,31 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     gl.drawArrays(gl.LINE_STRIP, 0, points.length);
   }
 
-  function loadNearby(cards, layout, dpr, view) {
-    
-    const reach = layout.stepX * .95;
-    const queue = cards.filter(entry => !entry.card.requested && entry.distance <= reach)
+  function loadNearby(cards, layout, dpr) {
+    const reach = layout.stepX * (layout.narrow ? .72 : .95);
+    const primaryArea = layout.stepX * layout.stepY * .14;
+    const queue = cards.filter(entry => entry.distance <= reach)
       .sort((a, b) => a.distance - b.distance || b.area - a.area);
-    for (const { card, art, distance } of queue.slice(0, Math.max(0, 6 - pending))) {
-      if (card.requested) continue;
+    for (const { card, art, distance, area } of queue) {
+      loadPreview(card);
+      const prominent = area >= primaryArea;
+      const mobile = layout.narrow && card.picture.dataset.mobile;
+      if (card.pending || card.requested === 'desktop' || (mobile && card.requested === 'mobile')) continue;
+      if (pending >= 6 || (!prominent && (pending >= 4 || backgroundPending >= 2))) continue;
+      card.requested = mobile ? 'mobile' : 'desktop';
+      card.pending = prominent ? 'visible' : 'nearby';
       pending++;
-      card.requested = card.pending = true;
-      const effectiveWidth = (art.right - art.left) * dpr / (devicePixelRatio || 1);
-      requestCover(card.picture, Math.ceil(effectiveWidth) + 'px', distance === 0 ? 'high' : 'low');
+      if (!prominent) backgroundPending++;
+      const priority = prominent ? 'high' : 'low';
+      if (mobile) {
+        card.source = mobile;
+        card.picture.loading = 'eager';
+        card.picture.fetchPriority = priority;
+        card.picture.src = mobile;
+      } else {
+        const width = (art.right - art.left) * dpr / (devicePixelRatio || 1);
+        requestCover(card.picture, Math.ceil(width) + 'px', priority);
+      }
     }
   }
 
@@ -456,7 +498,7 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
 
       return { tile, card, art, corners, center, area, visible, distance: viewportDistance(box, layout) };
     });
-    loadNearby(projected, layout, dpr, view);
+    loadNearby(projected, layout, dpr);
     const ordered = projected.filter(entry => entry.visible)
       .sort((a, b) => a.center.scale - b.center.scale);
     const primary = new Map();
@@ -503,7 +545,7 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
         gl.bindTexture(gl.TEXTURE_2D,card.field || solid);
         const flat=stage.dataset.hoverStyle==='flat';
         if (flat) gl.bindTexture(gl.TEXTURE_2D,solid);
-        const tint = flat ? [.16, .31, .47] : [.94, .94, .97];
+        const tint = flat ? [.16, .31, .47] : hoverTint;
         gl.uniform4f(tone, ...tint, level * .90);
         gl.bufferSubData(gl.ARRAY_BUFFER,0,mesh);
         gl.drawElements(gl.TRIANGLES,indices.length,gl.UNSIGNED_SHORT,0);
@@ -550,3 +592,4 @@ export function createScene(stage, links, { onRedraw, onFallback }) {
     },
   };
 }
+

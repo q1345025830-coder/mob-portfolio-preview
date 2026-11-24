@@ -220,7 +220,7 @@ function fallback() {
   scene?.destroy();
   scene = null;
   for (const link of links) {
-    requestCover(link.querySelector('img'), '(max-width: 680px) calc(100vw - 64px), min(45vw, 510px)', 'auto', 'lazy');
+    requestCover(link.querySelector('.artwork img'), '(max-width: 680px) calc(100vw - 64px), min(45vw, 510px)', 'auto', 'lazy');
   }
 }
 
@@ -233,6 +233,7 @@ function restoreEntry(resetOnReload = false) {
   clearTimeout(exitTimer);
   leaving = null;
   delete document.body.dataset.caseTheme;
+  delete document.body.dataset.caseTransition;
   stage.classList.remove('is-leaving', 'is-case-leaving', 'is-dragging');
   clearReturned();
   stopGlide();
@@ -407,8 +408,10 @@ stage.addEventListener('click', event => {
     preferredKey=scene.cellAt(point.x,point.y);
   }
   saveEntry(link.dataset.project);
-  if (!ready) return;
-  if (reduced.matches) { event.preventDefault(); location.assign(link.href); return; }
+  if (reduced.matches) {
+    if (ready) { event.preventDefault(); location.assign(link.href); }
+    return;
+  }
   event.preventDefault();
   exitToProject(link);
 });
@@ -419,12 +422,13 @@ function exitToProject(link) {
   const { caseTheme } = link.dataset;
   const entersCase = Boolean(caseTheme) || link.hasAttribute('data-case-transition');
   if (caseTheme) document.body.dataset.caseTheme = caseTheme;
+  if (entersCase) document.body.dataset.caseTransition = "active";
   if (gridVisible()) {
     stage.classList.add('is-leaving');
     stage.classList.toggle('is-case-leaving', entersCase);
     redraw();
   }
-  exitTimer = setTimeout(() => location.assign(link.href), entersCase ? 190 : 175);
+  exitTimer = setTimeout(() => location.assign(link.href), entersCase ? 260 : 175);
 }
 
 reset.addEventListener('click', () => {

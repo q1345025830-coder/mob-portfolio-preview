@@ -1,70 +1,95 @@
 window.mobResearch = {
   "cases": {
     "xt5": {
-      "tone": "#17232e"
+      "tone": "#17232e",
+      "brand": "CADILLAC"
     },
     "chengdu-motor-show": {
-      "tone": "#2a211d"
+      "tone": "#2a211d",
+      "brand": "CADILLAC"
     },
     "phev": {
-      "tone": "#152528"
+      "tone": "#152528",
+      "brand": "CADILLAC"
     },
     "service-skills-competition": {
-      "tone": "#2e1418"
+      "tone": "#2e1418",
+      "brand": "CADILLAC"
     },
     "volvo-xc70-exhibition": {
-      "tone": "#20332b"
+      "tone": "#20332b",
+      "brand": "VOLVO"
     },
     "hailar-ice-drive": {
-      "tone": "#18293c"
+      "tone": "#18293c",
+      "brand": "CADILLAC"
     },
     "new-year": {
-      "tone": "#46232a"
+      "tone": "#46232a",
+      "brand": "CADILLAC"
     },
     "mobile-showroom-2026": {
-      "tone": "#28242a"
+      "tone": "#28242a",
+      "brand": "CADILLAC"
     },
     "ct5-f1-track-drive": {
-      "tone": "#261e24"
+      "tone": "#261e24",
+      "brand": "CADILLAC"
     },
     "retail": {
-      "tone": "#302521"
+      "tone": "#302521",
+      "brand": "CADILLAC"
     },
     "xt5-creative-exhibition": {
-      "tone": "#291c17"
+      "tone": "#291c17",
+      "brand": "CADILLAC"
     },
     "xian-v-academy": {
-      "tone": "#252a2d"
+      "tone": "#252a2d",
+      "brand": "CADILLAC"
     },
     "anniversary": {
-      "tone": "#20232b"
+      "tone": "#20232b",
+      "brand": "SAIC-GM"
     },
     "volvo-showroom-renovation": {
-      "tone": "#302c26"
+      "tone": "#302c26",
+      "brand": "VOLVO"
     },
     "buick-posm": {
-      "tone": "#22282d"
+      "tone": "#22282d",
+      "brand": "BUICK"
     },
     "yangshuo": {
       "tone": "#1e2821"
     },
     "ct6-creative-exhibition": {
-      "tone": "#172c30"
+      "tone": "#172c30",
+      "brand": "CADILLAC"
     },
     "xt5-tibet": {
-      "tone": "#272b25"
+      "tone": "#272b25",
+      "brand": "CADILLAC"
     },
     "volvo-music-festival": {
-      "tone": "#10262b"
+      "tone": "#10262b",
+      "brand": "VOLVO"
     },
     "cadillac-changsha": {
-      "tone": "#2c241e"
+      "tone": "#2c241e",
+      "brand": "CADILLAC"
     },
     "cadillac-outdoor-exhibition": {
-      "tone": "#242922"
+      "tone": "#242922",
+      "brand": "CADILLAC"
     },
     "xt5-phev-chongqing": {
-      "tone": "#292520"
+      "tone": "#292520",
+      "brand": "CADILLAC"
+    },
+    "cadillac-fengfan-outdoor": {
+      "tone": "#262422",
+      "brand": "CADILLAC"
     }
   },
   "routes": {
@@ -85,6 +110,7 @@ window.mobResearch = {
     "volvo-music-festival.html": "volvo-music-festival",
     "cadillac-changsha.html": "cadillac-changsha",
     "cadillac-outdoor-exhibition.html": "cadillac-outdoor-exhibition",
-    "xt5-phev-chongqing.html": "xt5-phev-chongqing"
+    "xt5-phev-chongqing.html": "xt5-phev-chongqing",
+    "cadillac-fengfan-outdoor.html": "cadillac-fengfan-outdoor"
   }
 };

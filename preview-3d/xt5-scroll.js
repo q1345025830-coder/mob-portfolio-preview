@@ -1,4 +1,7 @@
-export function installWheelScroll(viewer) {
+let installed = false;
+export function installWheelScroll(viewer, active = () => true) {
+  if (installed) return;
+  installed = true;
   const enabled = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
   let frame = 0;
   let startTime = 0;
@@ -18,7 +21,7 @@ export function installWheelScroll(viewer) {
       stop();
       return;
     }
-    const time = Math.max(0, Math.min(1, (now - startTime) / 770));
+    const time = Math.max(0, Math.min(1, (now - startTime) / 700));
     const position = destination - (destination - origin) * (1 - time) ** 4.6;
     const done = Math.abs(destination - position) < 1;
     window.scrollTo({ top: done ? destination : position, behavior: 'instant' });
@@ -28,7 +31,7 @@ export function installWheelScroll(viewer) {
   }
 
   function wheel(event) {
-    if (!enabled.matches || viewer.open || event.defaultPrevented || !event.cancelable
+    if (!active() || !enabled.matches || viewer?.open || event.defaultPrevented || !event.cancelable
       || event.ctrlKey || event.metaKey || event.shiftKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
       stop();
       return;

@@ -6,6 +6,19 @@
   <meta name="theme-color" content="#151419">
   <meta name="robots" content="noindex">
   <title>MOB — 汽车品牌活动与空间设计</title>
+  <script>
+    (() => {
+      const id = location.hash.slice(6);
+      if (!location.hash.startsWith('#case/') || !matchMedia('(max-width: 760px)').matches
+        || !['phev', 'new-year', 'anniversary', 'yangshuo'].includes(id)) return;
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.as = 'image';
+      preload.fetchPriority = 'high';
+      preload.href = '../preview-3d/fast/hero/' + id + '.webp';
+      document.head.append(preload);
+    })();
+  </script>
   <link rel="stylesheet" href="review.css">
   <script defer src="../assets/js/projects.js"></script>
   <script defer src="../assets/js/profile.js"></script>

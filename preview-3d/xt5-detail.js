@@ -12,9 +12,9 @@ if (root.dataset.caseEnter === 'waiting') {
   const begin = () => requestAnimationFrame(() => requestAnimationFrame(() => {
     if (root.dataset.caseEnter === 'waiting') root.dataset.caseEnter = 'ready';
   }));
-  const deadline = setTimeout(begin, 760);
+  const deadline = setTimeout(begin, 420);
   const hero = document.querySelector('.hero-figure img');
-  Promise.allSettled([hero.decode(), document.fonts.ready]).then(() => {
+  hero.decode().catch(() => {}).then(() => {
     clearTimeout(deadline);
     begin();
   });

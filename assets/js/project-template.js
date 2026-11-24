@@ -28,21 +28,26 @@ window.renderProject = ({project,t,esc,link,lang,image}) => {
       ${indices.map(i => figure(i, '', false, paired ? halfWidth : fullWidth)).join('')}
     </div>`;
   };
-  const renderStory = ({main, supporting, title, copy}) => {
+  const renderStory = ({ main, supporting, title, copy, reference }) => {
     const heading = `<h2>${esc(title[locale].replaceAll('|', ' '))}</h2>`;
     const description = `<p class="editorial-description">${esc(copy[locale])}</p>`;
-    const indices = supporting.map(imageIndex);
-    const reference = project.id === 'ct6-creative-exhibition' && main === 'fluid-a' ? `
-      <figure class="story-study case-sourced-reference">
-        <img src="preview-3d/research/ferrofluid.webp" loading="lazy" decoding="async" alt="${t('磁流体在液面上形成尖峰','Spikes rising from a pool of ferrofluid')}">
-        <figcaption>${t('形态参考。对照上方两张圆罩方案，液面的尖峰从同一底部抬起，弯曲的尖顶留下细亮边。','Form reference. Compare the spikes in the two dome renderings above. Their tips rise from a shared base and catch narrow highlights.')}
-          <a href="https://commons.wikimedia.org/wiki/File:Ferrofluid_spikes_(magnet_placed_underneath_the_fluid).jpg">ChemGeeks</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a> · ${t('同许可缩放转码','Resized and re-encoded under the same license')}
-        </figcaption>
-      </figure>` : '';
+    const views = renderViews([imageIndex(main), ...supporting.map(imageIndex)]);
+    const comparison = reference ? `
+      <div class="editorial-reference-pair">
+        ${views}
+        <figure class="story-study case-sourced-reference${reference.width ? ' case-photo-reference' : ''}">
+          <img src="${esc(reference.src)}"${reference.width ? ' width="'+reference.width+'" height="'+reference.height+'"' : ''} loading="lazy" decoding="async" alt="${esc(reference.title[locale])}">
+          <figcaption><strong>${esc(reference.title[locale])}</strong>
+            <p>${esc(reference.copy[locale])}</p>
+            <a href="${esc(reference.source)}">${esc(reference.author)}</a> ·
+            <a href="${esc(reference.terms)}">${esc(reference.license[locale])}</a>
+            ${reference.edits ? ' · ' + esc(reference.edits[locale]) : ''}
+          </figcaption>
+        </figure>
+      </div>` : views;
     return `<section class="editorial-story">
       <div class="editorial-heading">${heading}${description}</div>
-      ${renderViews([imageIndex(main), ...indices])}
-      ${reference}
+      ${comparison}
     </section>`;
   };
   const featuredImages = new Set([0, ...(stories ?? []).flatMap(story => [story.main, ...story.supporting]).map(imageIndex)]);

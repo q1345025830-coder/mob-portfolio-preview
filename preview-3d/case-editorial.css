@@ -46,3 +46,15 @@
   .case-follow, .case-bridge .case-figure { width: 100%; }
   .case-follow { margin-top: 48px; }
 }
+
+/* Let the background-screen reference sit alongside the work it explains. */
+.aurora-comparison .photo-reference {
+  width: min(100%, 218px);
+  margin: clamp(24px, 4vw, 62px) 0 0;
+}
+@media (max-width: 680px) {
+  .aurora-comparison .photo-reference {
+    width: min(58%, 218px);
+    margin: 0 0 0 auto;
+  }
+}

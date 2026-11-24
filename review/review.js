@@ -9,6 +9,135 @@
       .filter(section => section.main.length || section.supporting.length);
     if (item.archive) item.archive = item.archive.filter(keep);
   }
+  const shortChapters = {
+    phev: [
+      { media: ['phev-2','phev-3'], title: ['青色灯带勾出展架','Cyan light traces the display'],
+        copy: ['正面灯带从暗色立柱两端露出，侧看则呈现它的进深。车顶和灯组同时带出反光，让展车轮廓从深色背景里浮出来。','From the front, cyan strips emerge at either side of the dark frame. The side view reveals their depth and where light catches the roof and headlamps.'] },
+      { media: ['phev-4'], title: ['车型字放在车头附近','Model lettering near the car'],
+        copy: ['把车型字放到车头前的地面，能与车辆同框。深色地台只留下青色边缘和亮字，视线仍集中在车身。','The model lettering sits on the floor in front of the car. Cyan edges and bright type remain visible against the dark base.'] }
+    ],
+    'new-year': [
+      { media: ['new-year-2'], title: ['顶圈、中柱与马形挂件','Ring, column and hanging horses'],
+        copy: ['暗底近景里，红色顶圈先勾出圆形轮廓，白色螺旋沿中柱向下接到底座。错落的马形挂件把顶圈和底座之间留成可透看的空间。','Against the dark background, the red ring gives the carousel its outline. The white spiral leads down the column, and the staggered horses leave spaces to see through.'] },
+      { media: ['new-year-3'], title: ['把节庆图案缩到台面','Festive details at tabletop scale'],
+        copy: ['滚筒把红白图案收进一个可近看的小体量。放在浅色台面边缘后，道具不会遮住后方的展车侧面。','The drum brings the red-and-white pattern down to a close viewing scale. The light tabletop keeps the prop legible while leaving the side of the car visible.'] }
+    ],
+    anniversary: [
+      { media: ['anniversary-3'], title: ['用路肩色块框住车身','Curb markings frame the car'],
+        copy: ['顶视里，两列红白路肩顺车身拉开间距。换到正面，可以看到车辆、站立人物和台面边界的相对高度。','From above, two strips of red-and-white curbing frame the vehicle. The front view shows the relative height of the car, the standing figure and the platform edge.'] },
+      { media: ['anniversary-2','anniversary-4'], title: ['留出坐下看车的距离','Room to sit beside the car'],
+        copy: ['VISTIQ 和座席分别占据展台两侧。高视角能看出圆形休息面与车侧之间的空隙，低视角则让车型立体字回到前景。','The VISTIQ and seating occupy separate sides of the platform. The elevated view shows the gap between them, and the lower view brings the model lettering to the foreground.'] }
+    ],
+    yangshuo: [
+      { media: ['yangshuo-2'], title: ['从接待柜台走到户外','From the reception counter outdoors'],
+        copy: ['入口的白色主画面贴着接待位布置。到了户外，黄色竖向标记靠近车队停靠面，从较远的位置也能辨认。','A light backdrop marks the reception point indoors. Outside, tall yellow markers identify the vehicle area from further away.'] },
+      { media: ['yangshuo-4'], title: ['开盒后的物件排列','How the objects sit inside the box'],
+        copy: ['掀开黄色盒盖后，黑色内托把物品依形状分开。较长的白色物件放在一侧，开盒时先读到一整排而不是一层散物。','Beneath the yellow lid, the black insert separates objects by shape. The long white piece sits at one side so the contents read as an arrangement when opened.'] }
+    ],
+  };
+  const shortReferences = {
+    "phev-2": {
+      "src": "preview-3d/research/phev-pexels-8108685.webp",
+      "title": [
+        "光影参考 · 折角灯带",
+        "Lighting reference · Lit corners"
+      ],
+      "copy": [
+        "照片的窄灯线在暗背景上勾出转角。展架正面的青色灯带同样让边缘先于暗色面板被看见。",
+        "Thin illuminated strips trace the corners against a dark background. Cyan light plays the same role against the display's dark panels."
+      ],
+      "author": "Mikhail Nilov",
+      "source": "https://www.pexels.com/photo/illuminated-strip-lights-8108685/",
+      "terms": "https://www.pexels.com/license/",
+      "license": [
+        "Pexels 许可",
+        "Pexels License"
+      ],
+      "width": 767,
+      "height": 1150
+    },
+    "new-year-2": {
+      "src": "preview-3d/research/new-year-pexels-6942302.webp",
+      "title": [
+        "结构参考 · 顶圈和吊杆",
+        "Structure reference · Canopy and suspension poles"
+      ],
+      "copy": [
+        "夜景中重复的垂直吊杆连接马形挂件和发光顶沿。原作把吊杆和挂件收进更小的顶圈，仍保留挂件之间的透视空隙。",
+        "Repeated vertical poles connect the carousel horses to the lit canopy edge. In the render, the smaller top ring keeps the poles and horses spaced apart."
+      ],
+      "author": "Daniel Eliashevsky",
+      "source": "https://www.pexels.com/photo/illuminated-carousel-with-horses-in-amusement-park-at-night-6942302/",
+      "terms": "https://www.pexels.com/license/",
+      "license": [
+        "Pexels 许可",
+        "Pexels License"
+      ],
+      "width": 1050,
+      "height": 700
+    },
+    "anniversary-3": {
+      "src": "preview-3d/research/anniversary-pexels-18956546.webp",
+      "title": [
+        "造型参考 · 红白路肩",
+        "Form reference · Alternating curb markings"
+      ],
+      "copy": [
+        "照片中连续的红白块沿弯道标出车道边界。CT5 展位将这种递进色块拉直到车身两侧，让台面边缘有清楚的赛道节奏。",
+        "Alternating red and white blocks mark the edge of the track. The CT5 display straightens that rhythm on either side of the car to define the platform."
+      ],
+      "author": "Moe Bodden",
+      "source": "https://www.pexels.com/photo/sports-car-on-racetrack-18956546/",
+      "terms": "https://www.pexels.com/license/",
+      "license": [
+        "Pexels 许可",
+        "Pexels License"
+      ],
+      "width": 767,
+      "height": 1150
+    },
+    "yangshuo-4": {
+      "src": "preview-3d/research/yangshuo-pexels-31651860.webp",
+      "title": [
+        "结构参考 · 按形开槽的内托",
+        "Structure reference · Fitted box insert"
+      ],
+      "copy": [
+        "照片中的黑色内托让杯壶各占一个清楚的位置。原案同样按物件形状开槽，用深色内托隔开浅色物件。",
+        "The dark insert gives each cup and vessel its own recess. The project similarly fits the objects into shaped compartments to separate the lighter contents."
+      ],
+      "author": "qua tet tra viet",
+      "source": "https://www.pexels.com/photo/elegant-glass-tea-set-in-gift-box-packaging-31651860/",
+      "terms": "https://www.pexels.com/license/",
+      "license": [
+        "Pexels 许可",
+        "Pexels License"
+      ],
+      "width": 1050,
+      "height": 1050
+    }
+  };
+  for (const project of shorts) {
+    const readings = shortChapters[project.id];
+    if (!readings) continue;
+    const oldViews = project.sections.flatMap(section => [...section.main,...section.supporting]);
+    const byMedia = new Map(oldViews.map(figure => [figure.media,figure]));
+    const chapters = readings.map(({ media,title,copy }) => ({
+      title:{zh:title[0],en:title[1]},
+      copy:{zh:copy[0],en:copy[1]},
+      main:media.map(id => byMedia.get(id)).filter(Boolean),
+      supporting:[],
+      reference:media.map(id => shortReferences[id]).find(Boolean),
+    })).filter(chapter => chapter.main.length);
+    if (!chapters.length) continue;
+    const placed = new Set(chapters.flatMap(chapter => chapter.main));
+    const extras = oldViews.filter(figure => !placed.has(figure));
+    if (extras.length) chapters.at(-1).main.push(...extras);
+    project.galleryOrder = oldViews;
+    project.sections = chapters;
+  }
+
+
   const gridPath = new URL('../preview-3d/index.html', location.href);
   const referrer = document.referrer && new URL(document.referrer);
   if (referrer && referrer.origin === gridPath.origin && referrer.pathname === gridPath.pathname) {
@@ -34,7 +163,7 @@
     images:['浏览图集','Browse images'],open:['查看高清图','View full resolution'],
     read:['向下阅读','Read the case'],
     video:['播放动画','Play animation'],play:['播放','Play'],
-    design:['设计说明','Design notes'],designHeading:['设计灵感与说明','Inspiration & design'],
+    design:['设计说明','Design notes'],designHeading:['设计说明','Design notes'],
     related:['下一件作品','Next project'],contactEmpty:['联系信息待补充。','Contact details to be supplied.']
   };
   function load(key,fallback) {
@@ -84,15 +213,20 @@
       (i.width?'width="'+i.width+'" height="'+i.height+'" ':'')+
       'alt="'+escape(tr(figure.alt||figure.caption))+'" '+(priority?'fetchpriority="high"':'loading="lazy"')+' decoding="async" '+extra+'>';
   }
-  function figureMarkup(figure,kind='primary',priority=false) {
+  const mobileCoverProjects=new Set(['phev','new-year','anniversary','yangshuo']);
+  function figureMarkup(figure,kind='primary',priority=false,mobileCover) {
     const hero=kind==='hero';
     const sizes=hero?'(max-width: 760px) 94vw, (max-width: 1500px) 94vw, 1400px':
       kind==='support'?'(max-width: 760px) 88vw, 30vw':
       kind==='comparison'?'(max-width: 760px) 94vw, 46vw':
       kind==='paired'?'(max-width: 760px) 94vw, 65vw':'(max-width: 760px) 94vw, 92vw';
     const index=imageIndex(figure);
+    const img=picture(figure,sizes,priority,hero?'data-case-cover':'fetchpriority="low"');
+    const media=mobileCover && mobileCoverProjects.has(mobileCover)
+      ? '<picture><source media="(max-width: 760px)" srcset="../preview-3d/fast/hero/'+mobileCover+'.webp">'+img+'</picture>'
+      : img;
     return '<figure class="case-figure '+kind+(figure.role==='reference'?' reference':'')+'"><button class="image-open" data-image="'+index+'" type="button" aria-label="'+escape(word('open')+' · '+tr(figure.caption))+'">'+
-      picture(figure,sizes,priority,hero?'data-case-cover':'')+'<span class="enlarge" aria-hidden="true">+</span></button><figcaption>'+escape(tr(figure.caption))+'</figcaption></figure>';
+      media+'<span class="enlarge" aria-hidden="true">+</span></button><figcaption>'+escape(tr(figure.caption))+'</figcaption></figure>';
   }
   function applyCopy() {
     document.documentElement.lang=lang==='zh'?'zh-CN':'en';
@@ -472,6 +606,18 @@
   function renderChapter(section,index) {
     const {main:images,supporting}=section;
     const title='<header class="chapter-heading"><h2>'+escape(tr(section.title))+'</h2><p>'+escape(tr(section.copy))+'</p></header>';
+    if(section.reference) {
+      const ref=section.reference;
+      const locale=lang==='en'?1:0;
+      const titleText=escape(ref.title[locale]);
+      const reference='<figure class="story-study case-sourced-reference case-photo-reference">'+
+        '<img src="../'+escape(ref.src)+'" width="'+ref.width+'" height="'+ref.height+'" loading="lazy" decoding="async" alt="'+titleText+'">'+
+        '<figcaption><strong>'+titleText+'</strong><p>'+escape(ref.copy[locale])+'</p>'+
+        '<span class="case-photo-credit"><a href="'+escape(ref.source)+'">'+escape(ref.author)+'</a> · <a href="'+escape(ref.terms)+'">'+escape(ref.license[locale])+'</a></span></figcaption></figure>';
+      return '<section class="chapter" id="chapter-'+index+'">'+title+
+        '<div class="editorial-reference-pair case-inline-reference">'+figureMarkup(images[0],'paired')+reference+'</div>'+
+        images.slice(1).map(img=>figureMarkup(img,'support')).join('')+'</section>';
+    }
     if(section.comparison) {
       return '<section class="chapter comparison-chapter" id="chapter-'+index+'">'+title+
         '<div class="image-pair comparison-pair">'+images.map(img=>figureMarkup(img,'comparison')).join('')+'</div>'+
@@ -487,14 +633,14 @@
   }
   function renderCase(p) {
     const chapters=p.sections;
-    gallery=[...new Set([p.cover,...chapters.flatMap(s=>[...s.main,...s.supporting]),...(p.archive||[])])];
+    gallery=[...new Set([p.cover,...(p.galleryOrder||[]),...chapters.flatMap(s=>[...s.main,...s.supporting]),...(p.archive||[])])];
     const collection=p.short?shorts:projects;
     const next=collection[(collection.indexOf(p)+1)%collection.length];
     const sectionHead=[p.brand,tr(p.category),p.year].filter(Boolean).join(' / ');
     const caseAction='<div class="case-jumps"><button class="glass" data-jump="design-heading" type="button">'+word('design')+'</button>'+
       (p.short?'':'<button class="glass" data-jump="gallery-heading" type="button">'+word('images')+'</button>')+'</div>';
     main.innerHTML='<article class="case-page" style="--tone:'+p.tone+'"><div class="case-tools frame"><a class="glass back" href="#work"><span aria-hidden="true">‹</span> '+word('back')+'</a>'+
-      (p.video?'<button class="glass" data-jump="case-film" type="button">▶ '+word('video')+'</button>':'')+caseAction+'</div><section class="case-screen" aria-label="'+escape(tr(p.title))+'">'+figureMarkup(p.cover,'hero',true)+
+      (p.video?'<button class="glass" data-jump="case-film" type="button">▶ '+word('video')+'</button>':'')+caseAction+'</div><section class="case-screen" aria-label="'+escape(tr(p.title))+'">'+figureMarkup(p.cover,'hero',true,p.id)+
       '<div class="screen-bar frame"><span class="screen-meta">'+escape(sectionHead)+'</span><button class="screen-read" data-jump="case-intro" type="button">'+word('read')+' <span aria-hidden="true">↓</span></button></div></section>'+
       '<div class="case-paper"><div class="case-reading"><header class="case-heading" id="case-intro" tabindex="-1"><div><p class="eyebrow">'+escape(sectionHead)+'</p><h1>'+escape(tr(p.title))+'</h1></div>'+
       (p.lead?'<p class="case-lead">'+escape(tr(p.lead))+'</p>':'')+'</header>'+
@@ -503,7 +649,7 @@
       chapters.map(renderChapter).join('')+'</div>'+
 
       (gallery.length<=1?'':'<section class="gallery" id="gallery"><header><h2 id="gallery-heading" tabindex="-1">'+word('gallery')+'</h2>'+(p.source?'<a href="'+p.source+'" target="_blank" rel="noopener">'+escape(tr(p.sourceLabel))+'</a>':'')+
-        '</header><div class="gallery-grid">'+gallery.map((img,i)=>'<button type="button" data-image="'+i+'" aria-label="'+escape(word('open')+' · '+tr(img.caption))+'">'+picture(img,'(max-width: 760px) 28vw, 14vw')+'</button>').join('')+
+        '</header><div class="gallery-grid">'+gallery.map((img,i)=>'<button type="button" data-image="'+i+'" aria-label="'+escape(word('open')+' · '+tr(img.caption))+'">'+picture(img,'(max-width: 760px) 28vw, 14vw',false,'fetchpriority="low"')+'</button>').join('')+
         '</div></section>')+'</div></div>'+
       '<footer class="case-footer"><div class="frame case-footer-inner"><a class="back" href="#work"><span aria-hidden="true">‹</span> '+word('back')+'</a>'+
       '<a href="'+coverLink(next)+'" class="related">'+picture(next.cover,'(max-width: 760px) 87vw, 55vw')+
