@@ -20,8 +20,36 @@
   if (intent.color && CSS.supports('color', intent.color)) root.style.setProperty('--mob-handoff', intent.color);
 
   let started = false;
+  let bridge;
+  function showBridge() {
+    if (!intent.title || !document.body || bridge) return;
+    bridge = document.createElement('div');
+    bridge.className = 'mob-arrival-bridge';
+    bridge.setAttribute('aria-hidden', 'true');
+    const title = document.createElement('span');
+    title.className = 'mob-handoff-title';
+    title.textContent = intent.title;
+    bridge.append(title);
+    document.body.prepend(bridge);
+  }
+
+  function releaseHero(hero) {
+    const image = hero.querySelector('img');
+    if (!image) return;
+    hero.dataset.mobHero = 'waiting';
+    const reveal = () => { hero.dataset.mobHero = 'ready'; };
+    const decode = () => image.decode().then(reveal, reveal);
+    if (image.complete) {
+      if (image.naturalWidth) decode();
+      else if (image.currentSrc) reveal();
+    }
+    image.addEventListener('load', decode, { once: true });
+    image.addEventListener('error', reveal, { once: true });
+  }
+
   function start(final = false) {
     if (started) return;
+    showBridge();
     const heading = document.querySelector('main h1');
     const hero = document.querySelector('main :is(.opening-view, .hero-figure, .case-screen, article > figure:first-of-type)');
     if (!final && (!heading || !hero?.querySelector('img'))) return;
@@ -29,39 +57,49 @@
     observer.disconnect();
     if (!heading || reduced.matches) {
       delete root.dataset.mobArrival;
+      bridge?.remove();
       return;
     }
+
+    // This entry owns the handoff. Avoid a second, browser-managed transition on return.
+    const optOut = document.createElement('style');
+    optOut.textContent = '@view-transition { navigation: none; }';
+    document.head.append(optOut);
+
     const title = heading.closest('[data-arrive="title"]') || heading;
     const metadata = document.querySelectorAll('main :is([data-arrive="meta"], .detail-head .discipline, .case-headline, .case-heading .facts)');
     title.dataset.mobPhase = 'title';
     for (const node of metadata) node.dataset.mobPhase = 'meta';
-    if (hero) hero.dataset.mobPhase = 'hero';
-
-    // The review layout keeps its main heading below the opening photograph.
-    // Present the same title over the color during entry, then leave the original reading order intact.
-    let reviewTitle;
-    if (hero?.matches('.case-screen') && title.getBoundingClientRect().top >= innerHeight) {
-      reviewTitle = document.createElement('div');
-      reviewTitle.className = 'mob-review-arrival';
-      reviewTitle.setAttribute('aria-hidden', 'true');
-      reviewTitle.textContent = heading.textContent;
-      hero.insertAdjacentElement('beforebegin', reviewTitle);
-      setTimeout(() => reviewTitle.remove(), 940);
+    if (hero) {
+      hero.dataset.mobPhase = 'hero';
+      releaseHero(hero);
     }
 
+    // Some review cases retain the heading below a full opening photograph.
+    const review = hero?.matches('.case-screen') && title.getBoundingClientRect().top >= innerHeight;
     const release = () => {
-      if (root.dataset.mobArrival === 'holding') root.dataset.mobArrival = 'playing';
+      if (root.dataset.mobArrival !== 'holding') return;
+      root.dataset.mobArrival = 'playing';
+      if (bridge) {
+        bridge.classList.add(review ? 'is-review' : 'is-clearing');
+        if (review) setTimeout(() => bridge.classList.add('is-clearing'), 330);
+        setTimeout(() => bridge.remove(), review ? 700 : 420);
+      }
     };
-    const deadline = setTimeout(release, 300);
+    const deadline = setTimeout(release, 240);
     requestAnimationFrame(() => requestAnimationFrame(() => {
       clearTimeout(deadline);
       release();
     }));
   }
+
   const observer = new MutationObserver(() => start());
   observer.observe(root, { childList: true, subtree: true });
   addEventListener('DOMContentLoaded', () => start(true), { once: true });
-  addEventListener('pageshow', event => {
-    if (event.persisted) delete root.dataset.mobArrival;
-  });
+  const clear = () => {
+    delete root.dataset.mobArrival;
+    bridge?.remove();
+  };
+  reduced.addEventListener('change', () => { if (reduced.matches) clear(); });
+  addEventListener('pageshow', event => { if (event.persisted) clear(); });
 })();

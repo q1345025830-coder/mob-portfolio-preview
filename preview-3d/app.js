@@ -1,4 +1,4 @@
-import { clamp, createScene, layoutFor, requestCover, viewForTile } from './surface.js';
+import { clamp, createScene, layoutFor, requestCover, viewForTile } from './surface.js?v=1124-5';
 
 const stage = document.querySelector('.stage');
 const links = [...stage.querySelectorAll('.project')];
@@ -432,6 +432,18 @@ function exitToProject(link) {
   const curtain = document.createElement('div');
   curtain.className = 'mob-entry-curtain';
   curtain.setAttribute('aria-hidden', 'true');
+  const title = links.find(card => card.dataset.project === link.dataset.project)?.querySelector('.project-meta.name')?.textContent.trim();
+  if (title) {
+    const heading = document.createElement('span');
+    heading.className = 'mob-handoff-title';
+    heading.textContent = title;
+    curtain.append(heading);
+  }
+  const url = new URL(link.href);
+  const prefetch = document.createElement('link');
+  prefetch.rel = 'prefetch';
+  prefetch.href = url.href;
+  document.head.append(prefetch);
   document.body.append(curtain);
   exitCurtain = curtain;
 
@@ -440,12 +452,12 @@ function exitToProject(link) {
     if (sent || leaving !== link) return;
     sent = true;
     clearTimeout(exitTimer);
-    const url = new URL(link.href);
     if (!reduced.matches) {
       try {
         sessionStorage.setItem('mobCaseArrival', JSON.stringify({
           destination: url.pathname + url.search + url.hash,
           color: getComputedStyle(curtain).backgroundColor,
+          title,
           sentAt: Date.now(),
         }));
       } catch { /* The destination can still use its normal direct entry. */ }
@@ -456,7 +468,7 @@ function exitToProject(link) {
     if (sent || leaving !== link) return;
     curtain.classList.add('is-covered');
     // Give the browser a paint opportunity at full coverage before it begins navigation.
-    requestAnimationFrame(() => requestAnimationFrame(navigate));
+    requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(navigate)));
   }
   curtain.addEventListener('animationend', covered, { once: true });
   curtain.addEventListener('animationcancel', covered, { once: true });

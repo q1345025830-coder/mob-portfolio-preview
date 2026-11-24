@@ -115,14 +115,18 @@ export function project(x, y, layout, view) {
   const dx = (x - view.x * stepX + view.driftX) * zoom;
   const dy = (y - view.y * stepY + view.driftY) * zoom;
   const u = (dx / (width * .54)) ** 2;
-  const v = (dy / (height * .68)) ** 2;
-  const scale = 1 / (1 + (narrow ? .070 : .168) * u / (1 + .63 * u) + (narrow ? .020 : .044) * v / (1 + .40 * v));
-  const crossBend = narrow ? .051 : .19 + .19 * wide;
-  const horizontal = dx * scale * (1 + crossBend * v / (.76 + v));
-  const edge = Math.min(1.65, (2 * horizontal / width) ** 2);
+  const v = (dy / (height * .58)) ** 2;
+  const edgeX = u / (.54 + u);
+  const edgeY = v / (.88 + v);
+  const scale = 1 / (1 + (narrow ? .048 : .11 + .13 * wide) * edgeX + (narrow ? .014 : .026) * edgeY);
+  // Columns stay quiet near the optical axis. Away from it, both ends of a
+  // column move outward, so the middle of each side visibly wraps inward.
+  const crossBend = narrow ? .07 + .035 * edgeX : .16 + .23 * wide + (.24 + .36 * wide) * edgeX;
+  const horizontal = dx * scale * (1 + crossBend * edgeY);
+  const edge = Math.min(1.8, (2 * horizontal / width) ** 2);
   const fromSeam = y - view.y * stepY;
-  const bend = fromSeam / (1 + .32 * (fromSeam / stepY) ** 2);
-  const bow = bend * zoom * edge * (narrow ? .072 : .22 + .12 * wide);
+  const bend = fromSeam / (1 + .30 * (fromSeam / stepY) ** 2);
+  const bow = bend * zoom * edge * (narrow ? .075 : .24 + .12 * wide);
   // Keep the lens centered on the viewport as the repeated plane moves beneath it.
   return {
     x: width * .5 + horizontal,
