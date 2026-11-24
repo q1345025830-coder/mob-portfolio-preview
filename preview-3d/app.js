@@ -22,6 +22,7 @@ let preferredKey;
 let scene, press, mouse, hovered, returned, leaving;
 let ready = false, gridStarted = false, suppressClick = false, restoring = false;
 let frame = 0, lastFrame = 0, exitTimer = 0;
+let exitCurtain;
 let section = 'work', workView = 'grid';
 const scrollOffsets = { grid: 0, list: 0, resume: 0 };
 const visibleMode = () => section === 'resume' ? 'resume' : workView;
@@ -233,7 +234,8 @@ function restoreEntry(resetOnReload = false) {
   clearTimeout(exitTimer);
   leaving = null;
   delete document.body.dataset.caseTheme;
-  delete document.body.dataset.caseTransition;
+  exitCurtain?.remove();
+  exitCurtain = null;
   stage.classList.remove('is-leaving', 'is-case-leaving', 'is-dragging');
   clearReturned();
   stopGlide();
@@ -421,14 +423,53 @@ function exitToProject(link) {
   stopGlide();
   const { caseTheme } = link.dataset;
   const entersCase = Boolean(caseTheme) || link.hasAttribute('data-case-transition');
-  if (caseTheme) document.body.dataset.caseTheme = caseTheme;
-  if (entersCase) document.body.dataset.caseTransition = "active";
-  if (gridVisible()) {
-    stage.classList.add('is-leaving');
-    stage.classList.toggle('is-case-leaving', entersCase);
-    redraw();
+  if (!entersCase) {
+    exitTimer = setTimeout(() => location.assign(link.href), 175);
+    return;
   }
-  exitTimer = setTimeout(() => location.assign(link.href), entersCase ? 260 : 175);
+  if (caseTheme) document.body.dataset.caseTheme = caseTheme;
+  if (gridVisible()) stage.classList.add('is-case-leaving');
+  const curtain = document.createElement('div');
+  curtain.className = 'mob-entry-curtain';
+  curtain.setAttribute('aria-hidden', 'true');
+  document.body.append(curtain);
+  exitCurtain = curtain;
+
+  let sent = false;
+  function navigate() {
+    if (sent || leaving !== link) return;
+    sent = true;
+    clearTimeout(exitTimer);
+    const url = new URL(link.href);
+    if (!reduced.matches) {
+      try {
+        sessionStorage.setItem('mobCaseArrival', JSON.stringify({
+          destination: url.pathname + url.search + url.hash,
+          color: getComputedStyle(curtain).backgroundColor,
+          sentAt: Date.now(),
+        }));
+      } catch { /* The destination can still use its normal direct entry. */ }
+    }
+    location.assign(url.href);
+  }
+  function covered() {
+    if (sent || leaving !== link) return;
+    curtain.classList.add('is-covered');
+    // Give the browser a paint opportunity at full coverage before it begins navigation.
+    requestAnimationFrame(() => requestAnimationFrame(navigate));
+  }
+  curtain.addEventListener('animationend', covered, { once: true });
+  curtain.addEventListener('animationcancel', covered, { once: true });
+  requestAnimationFrame(() => {
+    if (leaving === link) curtain.classList.add('is-rising');
+  });
+  exitTimer = setTimeout(() => {
+    if (document.hidden || reduced.matches) navigate();
+    else {
+      covered();
+      exitTimer = setTimeout(navigate, 180);
+    }
+  }, 740);
 }
 
 reset.addEventListener('click', () => {

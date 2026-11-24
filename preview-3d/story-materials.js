@@ -129,7 +129,7 @@
         readingHero = image;
         installReading(main, image);
         const navigated = performance.getEntriesByType("navigation")[0]?.type === "navigate";
-        if (navigated && !root.dataset.caseEnter && !reviewPage) root.dataset.mobEntry = "ready";
+        if (navigated && !root.dataset.caseEnter && !root.dataset.mobArrival && !reviewPage) root.dataset.mobEntry = "ready";
       }
     }
 

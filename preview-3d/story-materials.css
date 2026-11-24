@@ -107,3 +107,42 @@ html[data-mob-project]:not([data-mob-project=""]) .topbar { background: linear-g
 @keyframes mob-detail-arrive { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
 
 .case-tools .case-brand-return { background: transparent; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-mob-arrival] { animation: none; background-color: var(--mob-handoff, var(--mob-tone, #101010)); }
+  html[data-mob-arrival="holding"] body { background-color: var(--mob-handoff, var(--mob-tone, #101010)); }
+  html[data-mob-arrival="holding"] main { opacity: 0; }
+  html[data-mob-arrival] [data-arrive] { animation: none; opacity: 1; transform: none; }
+  html[data-mob-arrival="playing"] [data-mob-phase="title"] {
+    animation: mob-destination-title 320ms cubic-bezier(.2,.65,.3,1) 28ms both;
+  }
+  html[data-mob-arrival="playing"] [data-mob-phase="meta"] {
+    animation: mob-destination-title 285ms ease-out 151ms both;
+  }
+  html[data-mob-arrival="playing"] [data-mob-phase="hero"] {
+    animation: mob-destination-image 360ms ease-out 276ms both;
+  }
+  .mob-review-arrival {
+    position: fixed;
+    z-index: 6;
+    top: 26vh;
+    left: max(6vw, env(safe-area-inset-left));
+    right: max(6vw, env(safe-area-inset-right));
+    color: var(--paper-ink, #f4eee5);
+    font: 720 clamp(42px, 6.5vw, 102px)/1.04 system-ui, sans-serif;
+    pointer-events: none;
+  }
+  [data-mob-arrival="playing"] .mob-review-arrival {
+    animation: mob-review-title 740ms ease-out 28ms both;
+  }
+}
+@keyframes mob-destination-title {
+  from { opacity: 0; transform: translateY(9px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mob-destination-image { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mob-review-title {
+  0% { opacity: 0; transform: translateY(9px); }
+  41%, 58% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: none; }
+}
